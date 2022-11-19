@@ -159,7 +159,7 @@ def rsum(func: typing.Callable, *args: Dimension):
     :param func:
     :param args:
     :return:
-    :raise ValueError: The number of values in ``args`` does not equal the number of parameters of ``func``
+    :raise ValueError: The number of dimensions does not equal the number of parameters of ``func``
     """
     if len(args) != len(inspect.signature(func).parameters):
         raise ValueError(
