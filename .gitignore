@@ -1,0 +1,6 @@
+__pycache__/
+
+# IDE directories
+.idea/
+.vs/
+.vscode/
