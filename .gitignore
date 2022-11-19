@@ -1,6 +1,8 @@
 *.egg-info/
 __pycache__/
 dist/
+docs/make.bat
+docs/Makefile
 
 # IDE directories
 .idea/
