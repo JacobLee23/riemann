@@ -14,7 +14,7 @@ D = Decimal
 Dim = summation.Dimension
 
 # Global variable aliases
-L, M, U = summation.LOWER, summation.MIDPOINT, summation.UPPER
+L, M, U = summation.LOWER, summation.MIDDLE, summation.UPPER
 
 
 @pytest.mark.parametrize(

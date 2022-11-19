@@ -5,24 +5,18 @@
 
 .. :py:data:: L
 
-    :type: int
-    :value: -1
     :canonical: riemann._summation.LOWER
 
 .. :py:data:: M
 
-    :type: int
-    :value: 0
-    :canonical: riemann._summation.MIDPOINT
+    :canonical: riemann._summation.MIDDLE
 
 .. :py:data:: U
 
-    :type: int
-    :value: 1
     :canonical: riemann._summation.UPPER
 """
 
-from .summation import LOWER, MIDPOINT, UPPER
+from .summation import LOWER, MIDDLE, UPPER
 from .summation import Dimension
 from .summation import rsum
 
@@ -30,4 +24,4 @@ from .summation import rsum
 Dim = Dimension
 
 # Global variable aliases
-L, M, U = LOWER, MIDPOINT, UPPER
+L, M, U = LOWER, MIDDLE, UPPER
