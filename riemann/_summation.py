@@ -11,7 +11,6 @@ import typing
 D = Decimal
 Number = typing.Union[int, float, D]
 
-
 LOWER, MIDPOINT, UPPER = -1, 0, 1
 
 
@@ -22,7 +21,7 @@ class Dimension(typing.NamedTuple):
     mode: int
 
 
-def displacements(bounds: tuple[D, D], dx: D, n: int, mode: int) -> typing.Generator[D, None, None]:
+def _displacements(bounds: tuple[D, D], dx: D, n: int, mode: int) -> typing.Generator[D, None, None]:
     if mode == LOWER:
         return (bounds[0] + i * dx for i in range(0, n, 1))
     elif mode == MIDPOINT:
@@ -43,7 +42,7 @@ def summation(func: typing.Callable, *args: Dimension):
         b = D(str(dim.b) if isinstance(dim.b, float) else dim.b)
         dvar = (b - a) / dim.n
 
-        values.append(list(displacements((a, b), dvar, dim.n, dim.mode)))
+        values.append(list(_displacements((a, b), dvar, dim.n, dim.mode)))
         delta *= dvar
 
     return delta * sum(func(*v) for v in itertools.product(*values))
