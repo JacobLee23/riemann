@@ -1,5 +1,5 @@
 r"""
-Computes the Riemann summation of a function in :math:`n`-dimensional space.
+Computes the Riemann summation of functions in :math:`n`-dimensional space.
 
 From Wikipedia:
 

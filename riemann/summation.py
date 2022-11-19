@@ -1,4 +1,5 @@
 r"""
+Computes the Riemann summation of a multi-dimensional function a given interval.
 
 .. py:class:: D
 
@@ -54,17 +55,19 @@ LOWER, MIDDLE, UPPER = -1, 0, 1
 
 class Dimension(typing.NamedTuple):
     """
+    Contains the conditions for computing a Riemann summation over a dimension.
+
     .. :py:attribute:: a
 
-        The lower bound of the summation.
+        The lower bound of the summation interval.
 
     .. :py:attribute:: b
 
-        The upper bound of the summation.
+        The upper bound of the summation interval.
 
     .. :py:attribute:: n
 
-        The number of partitions into which the interval :math:`[a, b]` is divided.
+        The number of partitions into which the summation interval :math:`[a, b]` is divided.
 
     .. :py:attribute:: method
 
@@ -124,11 +127,17 @@ def _partition_values(
 
 
 def rsum(func: typing.Callable, *args: Dimension):
-    """
+    r"""
+    Computes the value of the Riemann summation of a function of several real variables over a
+    given interval.
 
-    :param func:
+    Parameter ``func`` can be written as :math:`f: {\mathbb{R}}^{n} \rightarrow \mathbb{R}`. The
+    number of items in ``args`` must equal :math:`n`, the number of parameters of ``func`` and the
+    number of dimensions of :math:`f`.
+
+    :param func: A function of several real variables
     :param args:
-    :return:
+    :return: The value of the Riemann summation for ``func``
     :raise ValueError: The number of dimensions does not equal the number of parameters of ``func``
     """
     if len(args) != len(inspect.signature(func).parameters):
