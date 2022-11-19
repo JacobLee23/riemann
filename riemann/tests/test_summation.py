@@ -11,12 +11,12 @@ from riemann._summation import LOWER, MIDPOINT, UPPER
 from riemann._summation import Dimension
 from riemann._summation import summation
 
-# Global variable aliases
-L, M, U = LOWER, MIDPOINT, UPPER
-
 # Type aliases
 D = Decimal
 Dim = Dimension
+
+# Global variable aliases
+L, M, U = LOWER, MIDPOINT, UPPER
 
 
 @pytest.mark.parametrize(
@@ -66,6 +66,23 @@ def test_summation_1d(func: typing.Callable, dimensions: typing.Iterable[Dim], x
 
     :param func:
     :param dimensions:
+    :param x:
+    :return:
+    """
+    res = summation(func, *dimensions)
+    assert res == x
+
+
+@pytest.mark.parametrize(
+    "func, dimensions, x", []
+)
+def test_summation_2d(func: typing.Callable, dimensions: typing.Iterable[Dim], x: D):
+    """
+
+    :param func:
+    :param dimensions:
+    :param x:
+    :return:
     """
     res = summation(func, *dimensions)
     assert res == x
