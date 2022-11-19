@@ -1,4 +1,6 @@
+*.egg-info/
 __pycache__/
+dist/
 
 # IDE directories
 .idea/
