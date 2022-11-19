@@ -81,7 +81,7 @@ class Dimension(typing.NamedTuple):
 
 
 def _partition_values(
-        bounds: tuple[Decimal, Decimal], delta: Decimal, n: int, method: int
+        bounds: typing.Tuple[Decimal, Decimal], delta: Decimal, n: int, method: int
 ) -> typing.Generator[Decimal, None, None]:
     r"""
     Computes the values of the independent variable at the partitions of interest.
