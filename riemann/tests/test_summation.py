@@ -1,5 +1,5 @@
 """
-Tests for :py:mod:`riemann._summation`.
+Tests for :py:mod:`riemann.summation`.
 """
 
 from decimal import Decimal
@@ -7,19 +7,14 @@ import typing
 
 import pytest
 
-from riemann._summation import LOWER, MIDPOINT, UPPER
-from riemann._summation import Dimension
-from riemann._summation import summation
+from riemann import summation
 
 # Type aliases
 D = Decimal
-Dim = Dimension
-
-# Function aliases
-rsum = summation
+Dim = summation.Dimension
 
 # Global variable aliases
-L, M, U = LOWER, MIDPOINT, UPPER
+L, M, U = summation.LOWER, summation.MIDPOINT, summation.UPPER
 
 
 @pytest.mark.parametrize(
@@ -72,7 +67,7 @@ def test_summation_1d(func: typing.Callable, dimensions: typing.Iterable[Dim], x
     :param x:
     :return:
     """
-    assert rsum(func, *dimensions) == x
+    assert summation.rsum(func, *dimensions) == x
 
 
 @pytest.mark.parametrize(
@@ -86,4 +81,4 @@ def test_summation_2d(func: typing.Callable, dimensions: typing.Iterable[Dim], x
     :param x:
     :return:
     """
-    assert rsum(func, *dimensions) == x
+    assert summation.rsum(func, *dimensions) == x
