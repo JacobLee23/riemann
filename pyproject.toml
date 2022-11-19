@@ -28,3 +28,11 @@ classifiers = [
 
 [project.urls]
 "Homepage" = "https://github.com/JacobLee23/riemann-sum"
+
+[tools.setuptools.packages.find]
+where = ["."]
+include = ["riemann"]
+exluce = [
+  "riemann.tests.*",
+  "docs.*"
+]
