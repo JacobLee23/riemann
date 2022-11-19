@@ -11,6 +11,7 @@ build = "*"
 pytest = "*"
 vermin = "*"
 pylint = "*"
+sphinx = "*"
 
 [requires]
 python_version = "3.11"
