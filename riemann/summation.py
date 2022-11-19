@@ -47,8 +47,7 @@ import typing
 
 
 # Type aliases
-D = Decimal
-Number = typing.Union[int, float, D]
+Number = typing.Union[int, float, Decimal]
 
 LOWER, MIDDLE, UPPER = -1, 0, 1
 
@@ -78,10 +77,12 @@ class Dimension(typing.NamedTuple):
     method: int
 
 
-def _displacements(
-        bounds: tuple[D, D], delta: D, n: int, method: int
-) -> typing.Generator[D, None, None]:
+def _partition_values(
+        bounds: tuple[Decimal, Decimal], delta: Decimal, n: int, method: int
+) -> typing.Generator[Decimal, None, None]:
     r"""
+    Computes the values of the independent variable at the partitions of interest.
+
     Case 1: ``method = LOWER``
 
         .. math::
@@ -97,22 +98,27 @@ def _displacements(
 
         .. math::
 
-            x_{i}^{*} = a+i\Delta x, \Delta x = \frac{b-a}{n}, i \in \{1,\dots,n\}
+            x_{i}^{*} = a+(i+1)\Delta x, \Delta x = \frac{b-a}{n}, i \in \{0,\dots,n-1\}
 
     :param bounds: A tuple of two values that represent the closed interval of the summation
     :param delta: The length of the each partition in the interval
-    :param n: The number of partitions into which the interval :math:`[a, b]` is divided.
+    :param n: The number of partitions into which the interval :math:`[a, b]` is divided
     :param method: The identified of the Riemann summation method to use
-    :return:
-    :raise ValueError:
+    :return: The values of the independent variable at the partitions of interest
+    :raise ValueError: An invalid Riemann summation method was used
     """
+    # Iterate over the interval :math:`i \in ([0, n-1] \cap \mathbb{Z})`
     for i in range(0, n, 1):
+        # Lower Riemann Summation method
         if method == LOWER:
             yield bounds[0] + i * delta
+        # Middle Riemann Summation method
         elif method == MIDDLE:
-            yield bounds[0] + D(2 * i + 1) / 2 * delta
+            yield bounds[0] + Decimal(2 * i + 1) / 2 * delta
+        # Upper Riemann Summation method
         elif method == UPPER:
             yield bounds[0] + (i + 1) * delta
+        # Handle invalid Riemann Summation methods
         else:
             raise ValueError
 
@@ -130,16 +136,24 @@ def rsum(func: typing.Callable, *args: Dimension):
             "The number of values in 'args' does not equal the number of parameters of 'func'"
         )
 
+    # Contains generators that yield the values to pass to the ``func``.
+    # Each element represents one of the :math:`n` dimensions.
     values = []
 
-    delta = D(1)
+    # :math:`\Delta V_{i}`
+    delta = Decimal(1)
 
+    # Iterate through the :math:`n` dimensions
     for dim in args:
-        a = D(str(dim.a) if isinstance(dim.a, float) else dim.a)
-        b = D(str(dim.b) if isinstance(dim.b, float) else dim.b)
-        dvar = (b - a) / dim.n
+        # Create :py:class:`decimal.Decimal` objects of numerical values
+        a = Decimal(str(dim.a) if isinstance(dim.a, float) else dim.a)
+        b = Decimal(str(dim.b) if isinstance(dim.b, float) else dim.b)
 
-        values.append(list(_displacements((a, b), dvar, dim.n, dim.method)))
+        # Compute :math:`\Delta x` for the :math:`n`-th dimension.
+        dvar = (b - a) / dim.n
         delta *= dvar
 
+        values.append(_partition_values((a, b), dvar, dim.n, dim.method))
+
+    # Compute the :math:`n`-th dimensional Riemann summation.
     return delta * sum(func(*v) for v in itertools.product(*values))
