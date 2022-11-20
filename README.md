@@ -1,1 +1,1 @@
-# riemann-sum
+# riemann
