@@ -1,14 +1,6 @@
 r"""
 Computes the Riemann sum of functions in :math:`n`-dimensional space over a given interval.
 
-.. py:class:: Number
-
-    Type alias equivalent to
-
-    .. code-block:: python
-
-        typing.Union[int, float, decimal.Decimal]
-
 .. py:data:: LOWER
 
     :type: int
@@ -40,11 +32,9 @@ Computes the Riemann sum of functions in :math:`n`-dimensional space over a give
 from decimal import Decimal
 import inspect
 import itertools
+from numbers import Number
 import typing
 
-
-# Type aliases
-Number = typing.Union[int, float, Decimal]
 
 LOWER, MIDDLE, UPPER = -1, 0, 1
 
@@ -77,7 +67,7 @@ class Dimension(typing.NamedTuple):
 
 
 def _partition_values(
-        bounds: typing.Tuple[Decimal, Decimal], delta: Decimal, n: int, method: int
+        interval: typing.Tuple[Decimal, Decimal], delta: Decimal, n: int, method: int
 ) -> typing.Generator[Decimal, None, None]:
     r"""
     Computes the values of the independent variable at the partitions of interest.
@@ -99,7 +89,7 @@ def _partition_values(
 
             x_{i}^{*} = a+(i+1)\Delta x, \Delta x = \frac{b-a}{n}, i \in \{0,\dots,n-1\}
 
-    :param bounds: A tuple of two values that represent the closed interval of the sum
+    :param interval: A tuple of two values that represent the closed interval of the sum
     :param delta: The length of the each partition in the interval
     :param n: The number of partitions into which the interval :math:`[a, b]` is divided
     :param method: The identified of the Riemann sum method to use
@@ -110,19 +100,19 @@ def _partition_values(
     for i in range(0, n, 1):
         # Lower Riemann Summation method
         if method == LOWER:
-            yield bounds[0] + i * delta
+            yield interval[0] + i * delta
         # Middle Riemann Summation method
         elif method == MIDDLE:
-            yield bounds[0] + Decimal(2 * i + 1) / 2 * delta
+            yield interval[0] + Decimal(2 * i + 1) / 2 * delta
         # Upper Riemann Summation method
         elif method == UPPER:
-            yield bounds[0] + (i + 1) * delta
+            yield interval[0] + (i + 1) * delta
         # Handle invalid Riemann Summation methods
         else:
             raise ValueError
 
 
-def rsum(func: typing.Callable, *args: Dimension):
+def rsum(func: typing.Callable[[Number, ...], Number], *args: Dimension):
     r"""
     Computes the Riemann sum of functions in :math:`n`-dimensional space over a given interval.
 
