@@ -1,6 +1,4 @@
 r"""
-Computes the Riemann summation of a multi-dimensional function a given interval.
-
 .. py:class:: D
 
     :canonical: decimal.Decimal
@@ -128,8 +126,8 @@ def _partition_values(
 
 def rsum(func: typing.Callable, *args: Dimension):
     r"""
-    Computes the value of the Riemann summation of a function of several real variables over a
-    given interval.
+    Computes the Riemann summation of functions in :math:`n`-dimensional space over a given
+    interval.
 
     Parameter ``func`` can be written as :math:`f: {\mathbb{R}}^{n} \rightarrow \mathbb{R}`. The
     number of items in ``args`` must equal :math:`n`, the number of parameters of ``func`` and the

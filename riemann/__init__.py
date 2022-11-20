@@ -1,6 +1,4 @@
 r"""
-Computes the Riemann summation of functions in :math:`n`-dimensional space.
-
 From Wikipedia:
 
     Let :math:`f: [a,b] \rightarrow \mathbb{R}` be a function defined on a closed interval
