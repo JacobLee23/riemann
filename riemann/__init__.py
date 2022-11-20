@@ -57,9 +57,9 @@ From Wikipedia:
     :canonical: riemann._summation.UPPER
 """
 
-from .summation import LOWER, MIDDLE, UPPER
-from .summation import Dimension
-from .summation import rsum
+from .riemann import LOWER, MIDDLE, UPPER
+from .riemann import Dimension
+from .riemann import rsum
 
 # Type aliases
 Dim = Dimension
