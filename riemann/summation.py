@@ -1,7 +1,5 @@
 r"""
-.. py:class:: D
-
-    :canonical: decimal.Decimal
+Computes the Riemann sum of functions in :math:`n`-dimensional space over a given interval.
 
 .. py:class:: Number
 

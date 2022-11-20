@@ -10,6 +10,7 @@ Contents
 .. toctree::
 
     quickstart
+    api
 
 
 
