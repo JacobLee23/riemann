@@ -53,19 +53,19 @@ LOWER, MIDDLE, UPPER = -1, 0, 1
 
 class Dimension(typing.NamedTuple):
     """
-    Contains the conditions for computing a Riemann summation over a dimension.
+    Contains the conditions for computing a Riemann sum over a dimension.
 
     .. :py:attribute:: a
 
-        The lower bound of the summation interval.
+        The lower bound of the sum interval.
 
     .. :py:attribute:: b
 
-        The upper bound of the summation interval.
+        The upper bound of the sum interval.
 
     .. :py:attribute:: n
 
-        The number of partitions into which the summation interval :math:`[a, b]` is divided.
+        The number of partitions into which the sum interval :math:`[a, b]` is divided.
 
     .. :py:attribute:: method
 
@@ -101,12 +101,12 @@ def _partition_values(
 
             x_{i}^{*} = a+(i+1)\Delta x, \Delta x = \frac{b-a}{n}, i \in \{0,\dots,n-1\}
 
-    :param bounds: A tuple of two values that represent the closed interval of the summation
+    :param bounds: A tuple of two values that represent the closed interval of the sum
     :param delta: The length of the each partition in the interval
     :param n: The number of partitions into which the interval :math:`[a, b]` is divided
-    :param method: The identified of the Riemann summation method to use
+    :param method: The identified of the Riemann sum method to use
     :return: The values of the independent variable at the partitions of interest
-    :raise ValueError: An invalid Riemann summation method was used
+    :raise ValueError: An invalid Riemann sum method was used
     """
     # Iterate over the interval :math:`i \in ([0, n-1] \cap \mathbb{Z})`
     for i in range(0, n, 1):
@@ -126,8 +126,7 @@ def _partition_values(
 
 def rsum(func: typing.Callable, *args: Dimension):
     r"""
-    Computes the Riemann summation of functions in :math:`n`-dimensional space over a given
-    interval.
+    Computes the Riemann sum of functions in :math:`n`-dimensional space over a given interval.
 
     Parameter ``func`` can be written as :math:`f: {\mathbb{R}}^{n} \rightarrow \mathbb{R}`. The
     number of items in ``args`` must equal :math:`n`, the number of parameters of ``func`` and the
@@ -135,7 +134,7 @@ def rsum(func: typing.Callable, *args: Dimension):
 
     :param func: A function of several real variables
     :param args:
-    :return: The value of the Riemann summation for ``func``
+    :return: The value of the Riemann sum for ``func``
     :raise ValueError: The number of dimensions does not equal the number of parameters of ``func``
     """
     if len(args) != len(inspect.signature(func).parameters):
@@ -162,5 +161,5 @@ def rsum(func: typing.Callable, *args: Dimension):
 
         values.append(_partition_values((a, b), dvar, dim.n, dim.method))
 
-    # Compute the :math:`n`-th dimensional Riemann summation.
-    return delta * sum(func(*v) for v in itertools.product(*values))
+    # Compute the :math:`n`-th dimensional Riemann sum.
+    return (delta * sum(func(*v) for v in itertools.product(*values))).normalize()
