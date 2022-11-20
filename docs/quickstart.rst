@@ -1,5 +1,5 @@
-API Reference
-=============
+Quickstart
+==========
 
 Installation
 ------------

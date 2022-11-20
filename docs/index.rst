@@ -9,7 +9,7 @@ Contents
 
 .. toctree::
 
-    api
+    quickstart
 
 
 
