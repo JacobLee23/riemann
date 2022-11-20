@@ -1,10 +1,8 @@
-.. riemann-sum documentation master file, created by
-   sphinx-quickstart on Sat Nov 19 15:43:52 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+riemann documentation
+=========================
 
-Welcome to riemann-sum's documentation!
-=======================================
+**riemann** is a pure-Python package for computing the Riemann summation of functions in
+:math:`n`-dimensional space.
 
 .. toctree::
    :maxdepth: 2
