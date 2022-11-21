@@ -8,15 +8,10 @@ API Reference
 
 .. automodule:: riemann
 
-``riemann.riemann``
--------------------
+.. autoclass:: riemann.Dimension
+.. autoclass:: riemann.Interval
+.. autoclass:: riemann.Method
 
-.. automodule:: riemann.riemann
+    .. autofunction:: riemann.Method.partitions
 
-.. autoclass:: riemann.riemann.Dimension
-.. autoclass:: riemann.riemann.Interval
-.. autoclass:: riemann.riemann.Method
-
-    .. autofunction:: riemann.riemann.Method.partitions
-
-.. autofunction:: riemann.riemann.rsum
+.. autofunction:: riemann.rsum
