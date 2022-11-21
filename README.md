@@ -41,14 +41,14 @@ Dimension(a=0, b=4, n=10, method=Method(name='middle'))
 Decimal('56.6048')
 ```
 
-The sole requirement is that the number of parameters taken by the function passed as the `func` argument to `riemann.riemann.rsum` equals the number of `riemann.riemann.Dimension` objects passed.
+The sole requirement is that the number of parameters taken by the function passed as the `func` argument to `riemann.rsum` equals the number of `riemann.Dimension` objects passed.
 
 ## Features
 
 - Fast computation of Riemann sum.
 - Support for computation of multi-dimensional Riemann sum.
 - Built-in support for left, middle, and right Riemann sum methods.
-- Support for custom Riemann sum methods (using the :py:class:`riemann.riemann.Method` class).
+- Support for custom Riemann sum methods (using the :py:class:`riemann.Method` class).
 
 ## Requirements
 
