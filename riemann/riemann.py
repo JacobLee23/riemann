@@ -1,7 +1,7 @@
 r"""
 Computes the Riemann sum of functions in :math:`n`-dimensional space over a given interval.
 
-.. py:data:: LOWER
+.. py:data:: LEFT
 
     :type: int
     :value: 1
@@ -23,7 +23,7 @@ Computes the Riemann sum of functions in :math:`n`-dimensional space over a give
 
         x_{i}^{*} = a+\frac{2i+1}{2}\Delta x, \Delta x=\frac{b-a}{n}, i \in \{0,1,\dots,n-1\}
 
-.. py:data:: UPPER
+.. py:data:: RIGHT
 
     :type: int
     :value: -1
@@ -85,9 +85,9 @@ class Method:
         return (self.func(interval, i, delta) for i in range(n))
 
 
-LOWER = Method("lower", lambda x, i, d: x.lower + i * d)
+LEFT = Method("left", lambda x, i, d: x.lower + i * d)
 MIDDLE = Method("middle", lambda x, i, d: x.lower + Decimal(2 * i + 1) / 2 * d)
-UPPER = Method("upper", lambda x, i, d: x.lower + (i + 1) * d)
+RIGHT = Method("right", lambda x, i, d: x.lower + (i + 1) * d)
 
 
 class Dimension(typing.NamedTuple):
