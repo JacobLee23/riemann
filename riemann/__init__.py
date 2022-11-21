@@ -46,22 +46,22 @@ From Wikipedia:
 
 .. :py:data:: L
 
-    :canonical: riemann.riemann.LOWER
+    :canonical: riemann.riemann.LEFT
 
 .. :py:data:: M
 
     :canonical: riemann.riemann.MIDDLE
 
-.. :py:data:: U
+.. :py:data:: R
 
-    :canonical: riemann.riemann.UPPER
+    :canonical: riemann.riemann.RIGHT
 """
 
-from .riemann import LOWER, MIDDLE, UPPER
+from .riemann import LEFT, MIDDLE, RIGHT
 from .riemann import Dimension
 from .riemann import Interval
 from .riemann import Method
 from .riemann import rsum
 
 # Global variable aliases
-L, M, U = LOWER, MIDDLE, UPPER
+L, M, U = LEFT, MIDDLE, RIGHT
