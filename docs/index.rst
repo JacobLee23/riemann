@@ -16,7 +16,7 @@ interval :math:`[0, 2]` using 10 partitions along the :math:`x` axis.
     >>> import riemann
     >>> from riemann import Dimension
     >>> f = lambda x: x ** 2
-    >>> dim_x = Dimension(0, 2, 10, riemann.LOWER)
+    >>> dim_x = Dimension(0, 2, 10, riemann.LEFT)
     >>> dim_x
     Dimension(a=0, b=2, n=10, method=Method(name='lower'))
     >>> riemann.rsum(f, dim_x)
@@ -44,8 +44,8 @@ partitions along the :math:`x` axis and 10 partitions along the :math:`y` axis.
     Decimal('56.6048')
 
 The sole requirement is that the number of parameters taken by the function passed as the ``func``
-argument to :py:func:`riemann.riemann.rsum` equals the number of
-:py:class:`riemann.riemann.Dimension` objects passed.
+argument to :py:func:`riemann.rsum` equals the number of :py:class:`riemann.Dimension` objects
+passed.
 
 Features
 --------
@@ -53,7 +53,7 @@ Features
 - Fast computation of Riemann sum.
 - Support for computation of multi-dimensional Riemann sum.
 - Built-in support for left, middle, and right Riemann sum methods.
-- Support for custom Riemann sum methods (using the :py:class:`riemann.riemann.Method` class).
+- Support for custom Riemann sum methods (using the :py:class:`riemann.Method` class).
 
 User Guide
 ----------
