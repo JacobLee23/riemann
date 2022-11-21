@@ -62,4 +62,6 @@ $ pip install riemann
 
 ## Documentation
 
+[![Documentation Status](https://readthedocs.org/projects/riemann-py/badge/?version=latest)](https://riemann-py.readthedocs.io/en/latest/?badge=latest)
+
 The documentation for this project is available on [Read the Docs](https://riemann-py.readthedocs.io/en/latest).
