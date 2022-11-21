@@ -1,38 +1,36 @@
 r"""
-Computes the Riemann sum of functions in :math:`n`-dimensional space over a given interval.
+Contains the objects for computing the Riemann Sum of functions of several variables over an
+arbitrary number of dimensions over a given interval.
 
 .. py:data:: LEFT
 
-    :type: int
-    :value: Middle('left')
-
-    Specifies that the function should use the Left Riemann Summation method.
+    Specifies that the Left Riemann Sum method should be used over the corresopnding dimension.
 
     .. math::
 
         x_{i}^{*} = a+i\Delta x, \Delta x=\frac{b-a}{n}, i \in \{0,1,\dots,n-1\}
 
+    :type: Method
+
 .. py:data:: MIDDLE
 
-    :type: int
-    :value: Middle('middle')
-
-    Specifices that the function should use the Middle Riemann Summation method.
+    Specifices that the Middle Riemann Sum method should be used over the corresponding dimension.
 
     .. math::
 
         x_{i}^{*} = a+\frac{2i+1}{2}\Delta x, \Delta x=\frac{b-a}{n}, i \in \{0,1,\dots,n-1\}
 
+    :type: Method
+
 .. py:data:: RIGHT
 
-    :type: int
-    :value: Middle('right')
-
-    Specifies that the function should use the Right Riemann Summation method.
+    Specifies that the Right Riemann Sum method should be used over the corresopnding dimension.
 
     .. math::
 
         x_{i}^{*} = a+(i+1)\Delta x, \Delta x = \frac{b-a}{n}, i \in \{0,\dots,n-1\}
+
+    :type: Method
 """
 
 from dataclasses import dataclass
@@ -52,9 +50,13 @@ class Interval:
 
         The lower bound of the interval.
 
+        :type: :py:class:`decimal.Decimal`
+
     .. py:attribute:: upper
 
         The upper bound of the interval.
+
+        :type: :py:class:`decimal.Decimal`
     """
     lower: Decimal
     upper: Decimal
@@ -63,12 +65,31 @@ class Interval:
 @dataclass
 class Method:
     """
+    Abstract class for defining custom Riemann Sum methods. There is built-in support for the three
+    most common Riemann Sum methods:
+
+    - Left Riemann Sum method: :py:data:`riemann.LEFT`
+    - Middle Riemann Sum method: :py:data:`riemann.MIDDLE`
+    - Right Riemann Sum method: :py:data:`riemann.RIGHT`
 
     .. py:attribute:: name
+
+        The name of the Riemann Sum method. This attribute is arbitrary and is solely used when
+        representing a :py:class:`riemann.Method` object as a string (e.g., for debugging
+        purposes).
 
         :type: str
 
     .. py:attribute:: func
+
+        A callable object that takes three parameters:
+
+        1. An :py:class:`riemann.Interval` object
+        2. An ``int`` object
+        3. A :py:class:`decimal.Decimal` object.
+
+        Yields the value of the independent variable at the :math:`i`-th partition in the closed
+        interval :math:`[a, b]`. 
 
         :type: typing.Callable
     """
@@ -84,11 +105,12 @@ class Method:
         self, interval: Interval, n: int, delta: Decimal
     ) -> typing.Generator[Decimal, None, None]:
         """
-        Computes the values of the independent variable at each of the partitions.
+        Computes the values of the independent variable at each of the :math:`n` partitions in the
+        closed interval :math:`[a, b]`.
 
-        :param interval: The closed interval of the summation
-        :param n: The number of partitions into which the interval :math:`[a, b]` is divided
-        :param delta: The length of the each partition in the interval
+        :param interval: The (closed) interval of the summation
+        :param n: The number of partitions into which the interval of the summation is divided
+        :param delta: The length of the each of the :math:`n` partition
         """
         return (self.func(interval, i, delta) for i in range(n))
 
@@ -101,23 +123,32 @@ RIGHT = Method("right", lambda x, i, d: x.lower + (i + 1) * d)
 @dataclass
 class Dimension:
     """
-    Contains the parameters of the summation on the dimension of interest.
+    Contains the parameters of the summation over the dimension of interest.
 
     .. py:attribute:: a
 
-        The lower bound of the interval of summation.
+        The lower bound of the interval of the summation.
+
+        :type: numbers.Number
 
     .. py:attribute:: b
 
-        The upper bound of the interval of summation.
+        The upper bound of the interval of the summation.
+
+        :type: number.Number
 
     .. py:attribute:: n
 
-        The number of partitions into which the interval of summation :math:`[a, b]` is divided.
+        The number of partitions into which the interval of the summation :math:`[a, b]` is
+        divided.
+
+        :type: int
 
     .. py:attribute:: method
 
-        The Riemann sum method to use.
+        The Riemann Sum method to use.
+
+        :type: Method
     """
     a: Number
     b: Number
@@ -127,15 +158,16 @@ class Dimension:
 
 def rsum(func: typing.Callable[..., Number], *args: Dimension):
     r"""
-    Computes the Riemann sum of functions in :math:`n`-dimensional space over a given interval.
+    Computes the Riemann Sum of functions of several variables over an arbitrary number of
+    dimensions over a given interval.
 
     Parameter ``func`` can be written as :math:`f: {\mathbb{R}}^{n} \rightarrow \mathbb{R}`. The
     number of items in ``args`` must equal :math:`n`, the number of parameters of ``func`` and the
     number of dimensions of :math:`f`.
 
     :param func: A function of several real variables
-    :param args:
-    :return: The value of the Riemann sum for ``func``
+    :param args: The parameters of the summation over each of the dimensions
+    :return: The value of the Riemann Sum
     :raise ValueError: The number of dimensions does not equal the number of parameters of ``func``
     """
     if len(args) != len(inspect.signature(func).parameters):
@@ -164,5 +196,5 @@ def rsum(func: typing.Callable[..., Number], *args: Dimension):
 
         values.append(dim.method.partitions(interval, dim.n, dvar))
 
-    # Compute the :math:`n`-th dimensional Riemann sum.
+    # Compute the :math:`n`-th dimensional Riemann Sum.
     return (delta * sum(func(*v) for v in itertools.product(*values))).normalize()
