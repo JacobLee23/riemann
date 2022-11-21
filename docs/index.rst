@@ -50,6 +50,11 @@ argument to :py:func:`riemann.riemann.rsum` equals the number of
 Features
 --------
 
+- Fast computation of Riemann sum.
+- Support for computation of multi-dimensional Riemann sum.
+- Built-in support for left, middle, and right Riemann sum methods.
+- Support for custom Riemann sum methods (using the :py:class:`riemann.riemann.Method` class).
+
 User Guide
 ----------
 
