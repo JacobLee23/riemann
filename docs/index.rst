@@ -59,6 +59,10 @@ User Guide
 ----------
 
 .. toctree::
+    :maxdepth: 2
+
+    user/install
+    user/quickstart
 
 API Documentation
 -----------------
