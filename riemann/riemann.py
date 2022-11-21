@@ -98,7 +98,8 @@ MIDDLE = Method("middle", lambda x, i, d: x.lower + Decimal(2 * i + 1) / 2 * d)
 RIGHT = Method("right", lambda x, i, d: x.lower + (i + 1) * d)
 
 
-class Dimension(typing.NamedTuple):
+@dataclass
+class Dimension:
     """
     Contains the parameters of the summation on the dimension of interest.
 

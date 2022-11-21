@@ -9,9 +9,9 @@ API Reference
 .. automodule:: riemann
 
 .. autoclass:: riemann.Dimension
+    :members:
 .. autoclass:: riemann.Interval
+    :members:
 .. autoclass:: riemann.Method
-
-    .. autofunction:: riemann.Method.partitions
-
+    :members:
 .. autofunction:: riemann.rsum
