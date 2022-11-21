@@ -19,7 +19,6 @@ author = "Jacob Lee"
 
 extensions = [
     "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
     "sphinx.ext.doctest",
     "sphinx.ext.duration",
 ]
