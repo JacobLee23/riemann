@@ -42,27 +42,26 @@ From Wikipedia:
 
 .. :py:class:: Dim
 
-    :canonical: riemann._summation.Dimension
+    :canonical: riemann.riemann.Dimension
 
 .. :py:data:: L
 
-    :canonical: riemann._summation.LOWER
+    :canonical: riemann.riemann.LOWER
 
 .. :py:data:: M
 
-    :canonical: riemann._summation.MIDDLE
+    :canonical: riemann.riemann.MIDDLE
 
 .. :py:data:: U
 
-    :canonical: riemann._summation.UPPER
+    :canonical: riemann.riemann.UPPER
 """
 
 from .riemann import LOWER, MIDDLE, UPPER
 from .riemann import Dimension
+from .riemann import Interval
+from .riemann import Method
 from .riemann import rsum
-
-# Type aliases
-Dim = Dimension
 
 # Global variable aliases
 L, M, U = LOWER, MIDDLE, UPPER

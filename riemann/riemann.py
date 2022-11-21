@@ -6,29 +6,36 @@ Computes the Riemann sum of functions in :math:`n`-dimensional space over a give
     :type: int
     :value: 1
 
-    Given :math:`x_{i}^{*} \in [x_{i-1},x_{i}]`, use :math:`x_{i}^{*} = x_{i-1}`
-
     Specifies that the function should use the Left Riemann Summation method.
+
+    .. math::
+
+        x_{i}^{*} = a+i\Delta x, \Delta x=\frac{b-a}{n}, i \in \{0,1,\dots,n-1\}
 
 .. py:data:: MIDDLE
 
     :type: int
     :value: 0
 
-    Given :math:`x_{i}^{*} \in [x_{i-1},x_{i}]`, use :math:`x_{i}^{*} = \frac{x_{i} + x_{i-1}}{2}`
-
     Specifices that the function should use the Middle Riemann Summation method.
+
+    .. math::
+
+        x_{i}^{*} = a+\frac{2i+1}{2}\Delta x, \Delta x=\frac{b-a}{n}, i \in \{0,1,\dots,n-1\}
 
 .. py:data:: UPPER
 
     :type: int
     :value: -1
 
-    Given :math:`x_{i}^{*} \in [x_{i-1},x_{i}]`, use :math:`x_{i}^{*} = x_{i}`
-
     Specifies that the function should use the Right Riemann Summation method.
+
+    .. math::
+
+        x_{i}^{*} = a+(i+1)\Delta x, \Delta x = \frac{b-a}{n}, i \in \{0,\dots,n-1\}
 """
 
+from dataclasses import dataclass
 from decimal import Decimal
 import inspect
 import itertools
@@ -36,83 +43,74 @@ from numbers import Number
 import typing
 
 
-LOWER, MIDDLE, UPPER = -1, 0, 1
+@dataclass
+class Interval:
+    """
+    Contains the bounds of an interval.
+
+    .. :py:attribute:: lower
+
+        The lower bound of the interval.
+
+    .. :py:attribute:: upper
+
+        The upper bound of the interval.
+    """
+    lower: Decimal
+    upper: Decimal
+
+
+@dataclass
+class Method:
+    """
+    """
+    func: typing.Callable[[Interval, int, Decimal], Decimal]
+
+    def partitions(
+        self, interval: Interval, n: int, delta: Decimal
+    ) -> typing.Generator[Decimal, None, None]:
+        """
+        Computes the values of the independent variable at each of the partitions.
+
+        :param interval: The closed interval of the summation
+        :param n: The number of partitions into which the interval :math:`[a, b]` is divided
+        :param delta: The length of the each partition in the interval
+        """
+        return (self.func(interval, i, delta) for i in range(n))
+
+
+LOWER = Method(lambda x, i, d: x.lower + i * d)
+MIDDLE = Method(lambda x, i, d: x.lower + Decimal(2 * i + 1) / 2 * d)
+UPPER = Method(lambda x, i, d: x.lower + (i + 1) * d)
 
 
 class Dimension(typing.NamedTuple):
     """
-    Contains the conditions for computing a Riemann sum over a dimension.
+    Contains the parameters of the summation on the dimension of interest.
 
     .. :py:attribute:: a
 
-        The lower bound of the sum interval.
+        The lower bound of the interval of summation.
 
     .. :py:attribute:: b
 
-        The upper bound of the sum interval.
+        The upper bound of the interval of summation.
 
     .. :py:attribute:: n
 
-        The number of partitions into which the sum interval :math:`[a, b]` is divided.
+        The number of partitions into which the interval of summation :math:`[a, b]` is divided.
 
     .. :py:attribute:: method
 
-        The Riemann rsum method to utilize. Should be equivalent to either :py:data:`LOWER`,
-        :py:data:`MIDDLE`, or :py:data:`UPPER`.
+        The Riemann sum method to use.
     """
     a: Number
     b: Number
     n: int
-    method: int
+    method: Method
 
 
-def _partition_values(
-        interval: typing.Tuple[Decimal, Decimal], delta: Decimal, n: int, method: int
-) -> typing.Generator[Decimal, None, None]:
-    r"""
-    Computes the values of the independent variable at the partitions of interest.
-
-    Case 1: ``method = LOWER``
-
-        .. math::
-
-            x_{i}^{*} = a+i\Delta x, \Delta x=\frac{b-a}{n}, i \in \{0,1,\dots,n-1\}
-
-    Case 2: ``method = MIDDLE``
-
-        .. math::
-            x_{i}^{*} = a+\frac{2i+1}{2}\Delta x, \Delta x=\frac{b-a}{n}, i \in \{0,1,\dots,n-1\}
-
-    Case 3: ``method = UPPER``
-
-        .. math::
-
-            x_{i}^{*} = a+(i+1)\Delta x, \Delta x = \frac{b-a}{n}, i \in \{0,\dots,n-1\}
-
-    :param interval: A tuple of two values that represent the closed interval of the sum
-    :param delta: The length of the each partition in the interval
-    :param n: The number of partitions into which the interval :math:`[a, b]` is divided
-    :param method: The identified of the Riemann sum method to use
-    :return: The values of the independent variable at the partitions of interest
-    :raise ValueError: An invalid Riemann sum method was used
-    """
-    # Iterate over the interval :math:`i \in ([0, n-1] \cap \mathbb{Z})`
-    for i in range(0, n, 1):
-        # Lower Riemann Summation method
-        if method == LOWER:
-            yield interval[0] + i * delta
-        # Middle Riemann Summation method
-        elif method == MIDDLE:
-            yield interval[0] + Decimal(2 * i + 1) / 2 * delta
-        # Upper Riemann Summation method
-        elif method == UPPER:
-            yield interval[0] + (i + 1) * delta
-        # Handle invalid Riemann Summation methods
-        else:
-            raise ValueError
-
-
-def rsum(func: typing.Callable[[Number, ...], Number], *args: Dimension):
+def rsum(func: typing.Callable[..., Number], *args: Dimension):
     r"""
     Computes the Riemann sum of functions in :math:`n`-dimensional space over a given interval.
 
@@ -139,15 +137,17 @@ def rsum(func: typing.Callable[[Number, ...], Number], *args: Dimension):
 
     # Iterate through the :math:`n` dimensions
     for dim in args:
-        # Create :py:class:`decimal.Decimal` objects of numerical values
-        a = Decimal(str(dim.a) if isinstance(dim.a, float) else dim.a)
-        b = Decimal(str(dim.b) if isinstance(dim.b, float) else dim.b)
+        # Create :py:class:`Interval` object from bounds
+        interval = Interval(
+            Decimal(str(dim.a) if isinstance(dim.a, float) else dim.a),
+            Decimal(str(dim.b) if isinstance(dim.b, float) else dim.b)
+        )
 
         # Compute :math:`\Delta x` for the :math:`n`-th dimension.
-        dvar = (b - a) / dim.n
+        dvar = (interval.upper - interval.lower) / dim.n
         delta *= dvar
 
-        values.append(_partition_values((a, b), dvar, dim.n, dim.method))
+        values.append(dim.method.partitions(interval, dim.n, dvar))
 
     # Compute the :math:`n`-th dimensional Riemann sum.
     return (delta * sum(func(*v) for v in itertools.product(*values))).normalize()
