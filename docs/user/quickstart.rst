@@ -11,8 +11,8 @@ Begin by importing the ``riemann`` package:
 
     import riemann
 
-Defining (Mathematical) Functions
----------------------------------
+Defining a (Mathematical) Function
+----------------------------------
 
 First, define a function (or ``lambda``) to represent a mathematical function of several real
 variables. The function can take any number of parameters (each of the arguments should be an
@@ -43,8 +43,9 @@ Since ``f`` takes only one parameter, only a single :py:class:`riemann.riemann.D
 needs to be created to contain the parameters for the summation of ``f`` over the :math:`x`
 dimension.
 
-For this example, ``f`` will be summed over the closed interval :math:`[0, 5]` using 10 partitions.
-Furthermore, the left Riemann sum method (:py:data:`riemann.riemann.LOWER`) will be used.
+For this example, :math:`f` will be summed over the closed interval :math:`[0, 5]` using 10
+partitions. Furthermore, the left Riemann sum method (:py:data:`riemann.riemann.LOWER`) will be
+used.
 
 .. code-block:: python
 
@@ -58,7 +59,7 @@ The other two Riemann sum methods with built-in support, the middle
 methods, could also be used. Or, alternatively, a custom Riemann sum method can be defined and
 used.
 
-Defining Riemann Sum methods
+Defining Riemann Sum Methods
 ----------------------------
 
 There are three common Riemann sum methods, which all have built-in support:
@@ -108,3 +109,58 @@ object.
 
     >>> riemann.rsum(f, dim_x)
     Decimal('35.625')
+
+Generalization
+--------------
+
+The procedure for computing the Riemann Sum for a function of several real variables over an
+arbitrary number of dimensions is quite similar to computing the Riemann Sum for a function of just
+one variable over just one dimension.
+
+As always, start by importing the **riemann** package:
+
+.. code-block:: python
+
+    >>> import riemann
+
+1. **Defining a Mathematical Function**
+
+Given the following function of :math:`n` real variables,
+
+.. math::
+
+    f: {\mathbb{R}}^{n} \rightarrow \mathbb{R},
+
+the callable object ``f``, which takes :math:`n` arguments, can be defined as follows:
+
+.. code-block:: python
+
+    >>> f = lambda x1, x2, ..., xn: ...
+
+2. **Defining Dimension Parameters**
+
+The callable object ``f`` takes :math:`n` arguments, therefore :math:`n`
+:py:class:`riemann.riemann.Dimension` must be created. In this generalization, :math:`f` will be
+summed over the closed interval :math:`[a_{1}, b_{1}]` using :math:`k_{1}` partitions along the
+:math:`x_{1}` axis, over the closed interval :math:`[a_{2}, b_{2}]` using :math:`k_{2}` partitions
+along the :math:`x_{2}` axis, etc.
+
+.. code-block:: python
+
+    >>> from riemann import Dimension
+    >>> dim_x1 = Dimension(a1, b1, k1, riemann.MIDDLE)
+    >>> dim_x2 = Dimension(a2, b2, k2, riemann.MIDDLE)
+    >>> ...
+    >>> dim_xn = Dimension(an, bn, kn, riemann.MIDDLE)
+
+3. **Computing the Riemann Sum**
+
+Once the function and all :math:`n` :py:class:`riemann.riemann.Dimension` objects have been
+defined, the :py:func:`riemann.riemann.rsum` function is called, passing the callable object of
+:math:`n` parameters followed by the :math:`n` :py:class:`riemann.riemann.Dimension` objects. The
+result again is a single :py:class:`decimal.Decimal` object.
+
+.. code-block:: python
+
+    >>> riemann.rsum(f, dim_x1, dim_x2, ..., dim_xn)
+    Decimal(...)
