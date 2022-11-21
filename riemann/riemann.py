@@ -4,7 +4,7 @@ Computes the Riemann sum of functions in :math:`n`-dimensional space over a give
 .. py:data:: LEFT
 
     :type: int
-    :value: 1
+    :value: Middle('left')
 
     Specifies that the function should use the Left Riemann Summation method.
 
@@ -15,7 +15,7 @@ Computes the Riemann sum of functions in :math:`n`-dimensional space over a give
 .. py:data:: MIDDLE
 
     :type: int
-    :value: 0
+    :value: Middle('middle')
 
     Specifices that the function should use the Middle Riemann Summation method.
 
@@ -26,7 +26,7 @@ Computes the Riemann sum of functions in :math:`n`-dimensional space over a give
 .. py:data:: RIGHT
 
     :type: int
-    :value: -1
+    :value: Middle('right')
 
     Specifies that the function should use the Right Riemann Summation method.
 
@@ -48,11 +48,11 @@ class Interval:
     """
     Contains the bounds of an interval.
 
-    .. :py:attribute:: lower
+    .. py:attribute:: lower
 
         The lower bound of the interval.
 
-    .. :py:attribute:: upper
+    .. py:attribute:: upper
 
         The upper bound of the interval.
     """
@@ -63,6 +63,14 @@ class Interval:
 @dataclass
 class Method:
     """
+
+    .. py:attribute:: name
+
+        :type: str
+
+    .. py:attribute:: func
+
+        :type: typing.Callable
     """
     name: str
     func: typing.Callable[[Interval, int, Decimal], Decimal]
@@ -94,19 +102,19 @@ class Dimension(typing.NamedTuple):
     """
     Contains the parameters of the summation on the dimension of interest.
 
-    .. :py:attribute:: a
+    .. py:attribute:: a
 
         The lower bound of the interval of summation.
 
-    .. :py:attribute:: b
+    .. py:attribute:: b
 
         The upper bound of the interval of summation.
 
-    .. :py:attribute:: n
+    .. py:attribute:: n
 
         The number of partitions into which the interval of summation :math:`[a, b]` is divided.
 
-    .. :py:attribute:: method
+    .. py:attribute:: method
 
         The Riemann sum method to use.
     """

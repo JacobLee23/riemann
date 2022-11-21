@@ -1,8 +1,22 @@
-API
-===
+.. _api:
 
-.. autosummary::
-    :toctree: generated
+API Reference
+=============
 
-    riemann
-    riemann.summation
+``riemann``
+-----------
+
+.. automodule:: riemann
+
+``riemann.riemann``
+-------------------
+
+.. automodule:: riemann.riemann
+
+.. autoclass:: riemann.riemann.Dimension
+.. autoclass:: riemann.riemann.Interval
+.. autoclass:: riemann.riemann.Method
+
+    .. autofunction:: riemann.riemann.Method.partitions
+
+.. autofunction:: riemann.riemann.rsum
