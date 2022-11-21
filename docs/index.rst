@@ -11,7 +11,7 @@ closed interval. The below code snippet computes the Riemann sum of :math:`f(x) 
 interval :math:`[0, 2]` using 10 partitions along the :math:`x` axis.
 
 .. doctest::
-    :pyversion: > 3.6
+    :pyversion: > 3.7
 
     >>> import riemann
     >>> from riemann import Dimension
@@ -29,7 +29,7 @@ closed multi-dimensional interval. The below code snippet computes the Riemann s
 partitions along the :math:`x` axis and 10 partitions along the :math:`y` axis.
 
 .. doctest::
-    :pyversion: > 3.6
+    :pyversion: > 3.7
 
     >>> import riemann
     >>> from riemann import Dimension

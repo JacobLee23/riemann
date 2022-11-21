@@ -3,6 +3,8 @@
 Installation
 ============
 
+**Riemann** required Python 3.7+.
+
 Installing from PyPI
 --------------------
 
