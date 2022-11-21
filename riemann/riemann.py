@@ -64,7 +64,13 @@ class Interval:
 class Method:
     """
     """
+    name: str
     func: typing.Callable[[Interval, int, Decimal], Decimal]
+
+    def __repr__(self) -> str:
+        """
+        """
+        return f"Method(name='{self.name}')"
 
     def partitions(
         self, interval: Interval, n: int, delta: Decimal
@@ -79,9 +85,9 @@ class Method:
         return (self.func(interval, i, delta) for i in range(n))
 
 
-LOWER = Method(lambda x, i, d: x.lower + i * d)
-MIDDLE = Method(lambda x, i, d: x.lower + Decimal(2 * i + 1) / 2 * d)
-UPPER = Method(lambda x, i, d: x.lower + (i + 1) * d)
+LOWER = Method("lower", lambda x, i, d: x.lower + i * d)
+MIDDLE = Method("middle", lambda x, i, d: x.lower + Decimal(2 * i + 1) / 2 * d)
+UPPER = Method("upper", lambda x, i, d: x.lower + (i + 1) * d)
 
 
 class Dimension(typing.NamedTuple):
