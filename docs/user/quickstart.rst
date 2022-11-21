@@ -95,8 +95,8 @@ For example, the left, middle, and right Riemann Sum methods are defined as foll
     Trapezoidal Riemann Sum, Lower Riemann sum, Upper Riemann Sum) cannot be defined in this
     manner.
 
-Computing Riemann Sums
-----------------------
+Computing the Riemann Sum
+-------------------------
 
 Once the function, dimension parameters, and (optional) Riemann Sum methods have been defined, the
 Riemann sum itself can then be computed, using the :py:meth:`riemann.riemann.rsum` function. Simply
