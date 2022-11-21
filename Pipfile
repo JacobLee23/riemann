@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+furo = "*"
 
 [dev-packages]
 twine = "*"
@@ -11,6 +12,7 @@ build = "*"
 pytest = "*"
 vermin = "*"
 pylint = "*"
+sphinx = "*"
 
 [requires]
 python_version = "3.11"
