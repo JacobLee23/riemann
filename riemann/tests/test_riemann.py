@@ -13,13 +13,25 @@ from riemann.riemann import Dimension
 from riemann.riemann import rsum
 
 F1D = [
-    lambda _: 0,
-    lambda _: 1,
+    lambda x: 0,
+    lambda x: 1,
     lambda x: x,
     lambda x: x ** 2,
     lambda x: x ** 3,
     lambda x: 1 / x,
     lambda x: 2 ** x,
+]
+F2D = [
+    lambda x, y: 0,
+    lambda x, y: 1,
+    lambda x, y: x,
+    lambda x, y: y,
+    lambda x, y: x + y,
+    lambda x, y: x * y, 
+    lambda x, y: x ** 2 * y,
+    lambda x, y: x * y ** 2,
+    lambda x, y: x ** 2 + y ** 2,
+    lambda x, y: x ** 2 * y ** 2,
 ]
 
 @pytest.mark.parametrize(
@@ -106,7 +118,47 @@ def test_summation_1d(func: typing.Callable, dimensions: typing.Iterable[Dimensi
 
 
 @pytest.mark.parametrize(
-    "func, dimensions, x", []
+    "func, dimensions, x", [
+        (F2D[0], [Dimension(-1, 1, 2, LEFT), Dimension(-1, 1, 2, LEFT)], 0),
+        (F2D[0], [Dimension(-1, 1, 2, MIDDLE), Dimension(-1, 1, 2, MIDDLE)], 0),
+        (F2D[0], [Dimension(-1, 1, 2, RIGHT), Dimension(-1, 1, 2, RIGHT)], 0),
+
+        (F2D[1], [Dimension(-1, 1, 2, LEFT), Dimension(-1, 1, 2, LEFT)], 4),
+        (F2D[1], [Dimension(-1, 1, 2, MIDDLE), Dimension(-1, 1, 2, MIDDLE)], 4),
+        (F2D[1], [Dimension(-1, 1, 2, RIGHT), Dimension(-1, 1, 2, RIGHT)], 4),
+
+        (F2D[2], [Dimension(-1, 1, 2, LEFT), Dimension(-1, 1, 2, LEFT)], -2),
+        (F2D[2], [Dimension(-1, 1, 2, MIDDLE), Dimension(-1, 1, 2, MIDDLE)], 0),
+        (F2D[2], [Dimension(-1, 1, 2, RIGHT), Dimension(-1, 1, 2, RIGHT)], 2),
+
+        (F2D[3], [Dimension(-1, 1, 2, LEFT), Dimension(-1, 1, 2, LEFT)], -2),
+        (F2D[3], [Dimension(-1, 1, 2, MIDDLE), Dimension(-1, 1, 2, MIDDLE)], 0),
+        (F2D[3], [Dimension(-1, 1, 2, RIGHT), Dimension(-1, 1, 2, RIGHT)], 2),
+
+        (F2D[4], [Dimension(-1, 1, 2, LEFT), Dimension(-1, 1, 2, LEFT)], -4),
+        (F2D[4], [Dimension(-1, 1, 2, MIDDLE), Dimension(-1, 1, 2, MIDDLE)], 0),
+        (F2D[4], [Dimension(-1, 1, 2, RIGHT), Dimension(-1, 1, 2, RIGHT)], 4),
+
+        (F2D[5], [Dimension(-1, 1, 2, LEFT), Dimension(-1, 1, 2, LEFT)], 1),
+        (F2D[5], [Dimension(-1, 1, 2, MIDDLE), Dimension(-1, 1, 2, MIDDLE)], 0),
+        (F2D[5], [Dimension(-1, 1, 2, RIGHT), Dimension(-1, 1, 2, RIGHT)], 1),
+
+        (F2D[6], [Dimension(-1, 1, 2, LEFT), Dimension(-1, 1, 2, LEFT)], -1),
+        (F2D[6], [Dimension(-1, 1, 2, MIDDLE), Dimension(-1, 1, 2, MIDDLE)], 0),
+        (F2D[6], [Dimension(-1, 1, 2, RIGHT), Dimension(-1, 1, 2, RIGHT)], 1),
+
+        (F2D[7], [Dimension(-1, 1, 2, LEFT), Dimension(-1, 1, 2, LEFT)], -1),
+        (F2D[7], [Dimension(-1, 1, 2, MIDDLE), Dimension(-1, 1, 2, MIDDLE)], 0),
+        (F2D[7], [Dimension(-1, 1, 2, RIGHT), Dimension(-1, 1, 2, RIGHT)], 1),
+
+        (F2D[8], [Dimension(-1, 1, 2, LEFT), Dimension(-1, 1, 2, LEFT)], 4),
+        (F2D[8], [Dimension(-1, 1, 2, MIDDLE), Dimension(-1, 1, 2, MIDDLE)], 2),
+        (F2D[8], [Dimension(-1, 1, 2, RIGHT), Dimension(-1, 1, 2, RIGHT)], 4),
+
+        (F2D[9], [Dimension(-1, 1, 2, LEFT), Dimension(-1, 1, 2, LEFT)], 1),
+        (F2D[9], [Dimension(-1, 1, 2, MIDDLE), Dimension(-1, 1, 2, MIDDLE)], 1 / Decimal(4)),
+        (F2D[9], [Dimension(-1, 1, 2, RIGHT), Dimension(-1, 1, 2, RIGHT)], 1),
+    ]
 )
 def test_summation_2d(func: typing.Callable, dimensions: typing.Iterable[Dimension], x: Decimal):
     """
