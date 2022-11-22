@@ -10,7 +10,6 @@ import pytest
 from riemann import riemann
 from riemann.riemann import LEFT, MIDDLE, RIGHT
 from riemann.riemann import Dimension
-from riemann.riemann import rsum
 
 F1D = [
     lambda x: 0,
@@ -27,12 +26,13 @@ F2D = [
     lambda x, y: x,
     lambda x, y: y,
     lambda x, y: x + y,
-    lambda x, y: x * y, 
+    lambda x, y: x * y,
     lambda x, y: x ** 2 * y,
     lambda x, y: x * y ** 2,
     lambda x, y: x ** 2 + y ** 2,
     lambda x, y: x ** 2 * y ** 2,
 ]
+
 
 @pytest.mark.parametrize(
     "func, dimensions, x", [

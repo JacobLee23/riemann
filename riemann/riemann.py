@@ -89,7 +89,7 @@ class Method:
         3. A :py:class:`decimal.Decimal` object.
 
         Yields the value of the independent variable at the :math:`i`-th partition in the closed
-        interval :math:`[a, b]`. 
+        interval :math:`[a, b]`.
 
         :type: typing.Callable
     """
