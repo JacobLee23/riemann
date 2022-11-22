@@ -35,6 +35,29 @@ F2D = [
 
 
 @pytest.mark.parametrize(
+    "func, dimensions", [
+        (lambda x: x, []),
+        (lambda x, y: x + y, []),
+        (lambda x, y: x + y, [Dimension(0, 1, 1, MIDDLE)]),
+        (lambda x, y, z: x + y + z, []),
+        (lambda x, y, z: x + y + z, [Dimension(0, 1, 1, MIDDLE)]),
+        (lambda x, y, z: x + y + z, [Dimension(0, 1, 1, MIDDLE), Dimension(0, 1, 1, MIDDLE)]),
+
+        (lambda: 0, [Dimension(0, 1, 1, MIDDLE)]),
+        (lambda x: x, [Dimension(0, 1, 1, MIDDLE), Dimension(0, 1, 1, MIDDLE)]),
+        (lambda x, y: x + y, [
+            Dimension(0, 1, 1, MIDDLE), Dimension(0, 1, 1, MIDDLE), Dimension(0, 1, 1, MIDDLE)
+        ]),
+    ]
+)
+def test_summation_value_error(func: typing.Callable, dimensions: typing.Iterable[Dimension]):
+    """
+    """
+    with pytest.raises(ValueError):
+        assert riemann.rsum(func, *dimensions)
+
+
+@pytest.mark.parametrize(
     "func, dimensions, x", [
         (F1D[0], [Dimension(0, 1, 1, LEFT)], 0),
         (F1D[0], [Dimension(0, 1, 1, MIDDLE)], 0),
