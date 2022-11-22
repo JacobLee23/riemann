@@ -1,7 +1,6 @@
 # riemann
 
-**Riemann** is a pure-Python package for computing the Riemann summation of functions in
-$n$-dimensional space.
+**Riemann** is a pure-Python package for computing Riemann sums of functions in n-dimensional space
 
 [![GitHub](https://img.shields.io/github/license/JacobLee23/riemann)](https://github.com/JacobLee23/riemann/blob/master/LICENSE)
 ![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/JacobLee23/riemann)
