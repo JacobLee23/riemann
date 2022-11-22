@@ -27,11 +27,14 @@ classifiers = [
 
 [project.urls]
 "Homepage" = "https://github.com/JacobLee23/riemann"
+"Documentation" = "https://riemann-py.readthedocs.io/en/latest/"
+"Issue Tracker" = "https://github.com/JacobLee23/riemann/issues/"
 
 [tools.setuptools.packages.find]
 where = ["."]
 include = ["riemann"]
 exclude = [
-  "docs.*",
-  "riemann.tests.*",
+  "docs*",
+  "htmlcov*",
+  "riemann.tests*",
 ]
