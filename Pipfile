@@ -13,6 +13,8 @@ pytest = "*"
 vermin = "*"
 pylint = "*"
 sphinx = "*"
+tox = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.11"
