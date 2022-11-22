@@ -31,7 +31,7 @@ classifiers = [
 [tools.setuptools.packages.find]
 where = ["."]
 include = ["riemann"]
-exluce = [
+exclude = [
+  "docs.*",
   "riemann.tests.*",
-  "docs.*"
 ]
