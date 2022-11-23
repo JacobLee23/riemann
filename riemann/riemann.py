@@ -156,6 +156,23 @@ class Dimension:
     method: Method
 
 
+def check_dimensions(f: typing.Callable) -> typing.Callable:
+    """
+    """
+    def wrapper(func: typing.Callable[..., Number], *args: Dimension):
+        """
+        """
+        if len(args) != len(inspect.signature(func).parameters):
+            raise ValueError(
+                "The number of values in 'args' does not equal the number of parameters of 'func'"
+            )
+
+        return f(func, *args)
+
+    return wrapper
+
+
+@check_dimensions
 def rsum(func: typing.Callable[..., Number], *args: Dimension):
     r"""
     Computes the Riemann Sum of functions of several variables over an arbitrary number of
@@ -170,11 +187,6 @@ def rsum(func: typing.Callable[..., Number], *args: Dimension):
     :return: The value of the Riemann Sum
     :raise ValueError: The number of dimensions does not equal the number of parameters of ``func``
     """
-    if len(args) != len(inspect.signature(func).parameters):
-        raise ValueError(
-            "The number of values in 'args' does not equal the number of parameters of 'func'"
-        )
-
     # Contains generators that yield the values to pass to the ``func``.
     # Each element represents one of the :math:`n` dimensions.
     values = []
