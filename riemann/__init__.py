@@ -43,7 +43,8 @@ From Wikipedia:
 """
 
 from .riemann import LEFT, MIDDLE, RIGHT
-from .riemann import Dimension
-from .riemann import Interval
-from .riemann import Method
 from .riemann import rsum
+from .structures import Dimension
+from .structures import Interval
+from .structures import Method
+from .structures import Subintervals

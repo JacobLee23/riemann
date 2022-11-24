@@ -7,9 +7,10 @@ import typing
 
 import pytest
 
+from riemann.structures import Dimension
 from riemann import riemann
 from riemann.riemann import LEFT, MIDDLE, RIGHT
-from riemann.riemann import Dimension
+
 
 F1D = [
     lambda x: 0,
