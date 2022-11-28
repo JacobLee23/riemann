@@ -34,6 +34,7 @@ arbitrary number of dimensions over a given interval.
 """
 
 from decimal import Decimal
+import functools
 import inspect
 import itertools
 from numbers import Number
@@ -41,6 +42,7 @@ import typing
 
 from .structures import Dimension
 from .structures import Method
+from .structures import Subintervals
 
 
 LEFT = Method("left", lambda x: x.a)
@@ -79,19 +81,12 @@ def rsum(func: typing.Callable[..., Number], *args: Dimension):
     :return: The value of the Riemann Sum
     :raise ValueError: The number of dimensions does not equal the number of parameters of ``func``
     """
+    # $\Delta V_{i}$
+    delta = Decimal(functools.reduce(lambda a, b: a * b, [d.subintervals.length for d in args]))
+
     # Contains generators that yield the values to pass to the ``func``.
     # Each element represents one of the $n$ dimensions.
-    values = []
-
-    # $\Delta V_{i}$
-    delta = Decimal(1)
-
-    # Iterate through the $n$ dimensions
-    for dim in args:
-        # Compute $\Delta x$ for the $n$-th dimension.
-        delta *= dim.subintervals.length
-
-        values.append(dim.method.partitions(dim.subintervals))
+    values = [d.method.partitions(d.subintervals) for d in args]
 
     # Compute the $n$-th dimensional Riemann Sum.
     return (delta * sum(func(*v) for v in itertools.product(*values))).normalize()
