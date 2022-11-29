@@ -80,6 +80,8 @@ class Subintervals(Interval):
 
         super().__init__(a, b)
 
+        self._length = (self.b - self.a) / self.k
+
     @property
     def k(self) -> int:
         """
@@ -99,7 +101,7 @@ class Subintervals(Interval):
         """
         :return: The length of each of the :math:`k` subdivisions of :py:attr:`interval`
         """
-        return (self.b - self.a) / self.k
+        return self._length
 
     def subintervals(self) -> typing.Generator[Interval, None, None]:
         """
