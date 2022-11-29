@@ -53,7 +53,7 @@ RIGHT = Method("right", lambda x: x.b)
 def check_dimensions(f: typing.Callable) -> typing.Callable:
     """
     """
-    def wrapper(func: typing.Callable[..., Number], *args: Dimension):
+    def wrapper(func: typing.Callable[..., Number], *args):
         """
         """
         if len(args) != len(inspect.signature(func).parameters):
@@ -82,11 +82,27 @@ def rsum(func: typing.Callable[..., Number], *args: Dimension):
     :raise ValueError: The number of dimensions does not equal the number of parameters of ``func``
     """
     # $\Delta V_{i}$
-    delta = Decimal(functools.reduce(lambda a, b: a * b, [d.subintervals.length for d in args]))
+    delta = Decimal(functools.reduce(lambda a, b: a * b, (d.subintervals.length for d in args)))
 
     # Contains generators that yield the values to pass to the ``func``.
     # Each element represents one of the $n$ dimensions.
-    values = [d.method.partitions(d.subintervals) for d in args]
+    values = (d.method.partitions(d.subintervals) for d in args)
 
     # Compute the $n$-th dimensional Riemann Sum.
     return (delta * sum(func(*v) for v in itertools.product(*values))).normalize()
+
+
+@check_dimensions
+def trapezoidal_rule(func: typing.Callable[..., Number], *args: Subintervals):
+    r"""
+
+    :param func:
+    :param args:
+    :return:
+    :raise ValueError:
+    """
+    dimensions = itertools.product(
+        *((Dimension(s.a, s.b, s.k, LEFT), Dimension(s.a, s.b, s.k, RIGHT)) for s in args)
+    )
+
+    return (sum(rsum(func, *d) for d in dimensions) / Decimal(2) ** len(args)).normalize()
