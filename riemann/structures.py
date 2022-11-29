@@ -104,11 +104,10 @@ class Subintervals(Interval):
     def subintervals(self) -> typing.Generator[Interval, None, None]:
         """
         """
-        return (
-            Interval(
-                self.a + i * self.length, self.a + (i + 1) * self.length,
-            ) for i in range(self.k)
-        )
+        lower = self.a
+        for _ in range(self.k):
+            yield Interval(lower, lower + self.length)
+            lower += self.length
 
 
 @dataclass
