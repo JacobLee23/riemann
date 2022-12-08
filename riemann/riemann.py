@@ -82,14 +82,14 @@ def rsum(func: typing.Callable[..., Number], *args: Dimension):
     :raise ValueError: The number of dimensions does not equal the number of parameters of ``func``
     """
     # $\Delta V_{i}$
-    delta = Decimal(functools.reduce(lambda a, b: a * b, (d.subintervals.length for d in args)))
+    delta = functools.reduce(lambda a, b: a * b, (d.subintervals.length for d in args))
 
     # Contains generators that yield the values to pass to the ``func``.
     # Each element represents one of the $n$ dimensions.
     values = (d.method.partitions(d.subintervals) for d in args)
 
     # Compute the $n$-th dimensional Riemann Sum.
-    return (delta * sum(func(*v) for v in itertools.product(*values))).normalize()
+    return (sum(func(*v) for v in itertools.product(*values)) * delta).normalize()
 
 
 @check_dimensions
