@@ -43,7 +43,7 @@ Since ``f`` takes only one parameter, only a single :py:class:`riemann.Dimension
 be created to contain the parameters for the summation of ``f`` over the :math:`x` dimension.
 
 For this example, :math:`f` will be summed over the closed interval :math:`[0, 5]` using 10
-partitions. Furthermore, the left Riemann sum method (:py:data:`riemann..LOWER`) will be used.
+partitions. Furthermore, the left Riemann sum method (:py:data:`riemann.LOWER`) will be used.
 
 .. code-block:: python
 

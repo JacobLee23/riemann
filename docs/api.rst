@@ -5,7 +5,7 @@ API Reference
 
 .. autosummary::
     riemann
-    riemann.riemann
+    riemann.summation
 
 ----------
 
@@ -16,17 +16,29 @@ API Reference
 
 ----------
 
-``riemann.riemann``
--------------------
-.. automodule:: riemann.riemann
+``riemann.structures``
+----------------------
+.. automodule:: riemann.structures
 
 ----------
 
-.. autoclass:: riemann.Interval
+.. autoclass:: riemann.structures.Interval
     :members:
-.. autoclass:: riemann.Method
+.. autoclass:: riemann.structures.Subintervals
     :members:
-.. autoclass:: riemann.Dimension
+.. autoclass:: riemann.structures.Method
+    :members:
+.. autoclass:: riemann.structures.Dimension
     :members:
 
+``riemann.summation``
+---------------------
+.. automodule:: riemann.summation
+
+----------
+
+.. autofunction:: riemann.riemann_sum
 .. autofunction:: riemann.rsum
+
+.. autofunction:: riemann.trapezoidal_rule
+.. autofunction:: riemann.trule
