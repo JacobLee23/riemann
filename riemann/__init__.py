@@ -42,8 +42,9 @@ From Wikipedia:
 (Source: `[2] <https://en.wikipedia.org/wiki/Riemann_sum#Arbitrary_number_of_dimensions>`_)
 """
 
-from .riemann import LEFT, MIDDLE, RIGHT
-from .riemann import rsum
+from .summation import LEFT, MIDDLE, RIGHT
+from .summation import riemann_sum, rsum
+from .summation import trapezoidal_rule, trule
 from .structures import Dimension
 from .structures import Interval
 from .structures import Method

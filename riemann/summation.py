@@ -67,7 +67,7 @@ def check_dimensions(f: typing.Callable) -> typing.Callable:
 
 
 @check_dimensions
-def rsum(func: typing.Callable[..., Number], *args: Dimension):
+def riemann_sum(func: typing.Callable[..., Number], *args: Dimension):
     r"""
     Computes the Riemann Sum of functions of several variables over an arbitrary number of
     dimensions over a given interval.
@@ -92,6 +92,9 @@ def rsum(func: typing.Callable[..., Number], *args: Dimension):
     return (sum(func(*v) for v in itertools.product(*values)) * delta).normalize()
 
 
+rsum = riemann_sum
+
+
 @check_dimensions
 def trapezoidal_rule(func: typing.Callable[..., Number], *args: Subintervals):
     r"""
@@ -105,4 +108,7 @@ def trapezoidal_rule(func: typing.Callable[..., Number], *args: Subintervals):
         *((Dimension(s.a, s.b, s.k, LEFT), Dimension(s.a, s.b, s.k, RIGHT)) for s in args)
     )
 
-    return (sum(rsum(func, *d) for d in dimensions) / Decimal(2) ** len(args)).normalize()
+    return (sum(riemann_sum(func, *d) for d in dimensions) / Decimal(2) ** len(args)).normalize()
+
+
+trule = trapezoidal_rule

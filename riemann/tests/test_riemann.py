@@ -1,5 +1,5 @@
 """
-Tests for :py:mod:`riemann.riemann`.
+Tests for :py:mod:`riemann.summation`.
 """
 
 from decimal import Decimal
@@ -7,9 +7,9 @@ import typing
 
 import pytest
 
+from riemann import summation
 from riemann.structures import Dimension
-from riemann import riemann
-from riemann.riemann import LEFT, MIDDLE, RIGHT
+from riemann.summation import LEFT, MIDDLE, RIGHT
 
 
 F1D = [
@@ -55,7 +55,7 @@ def test_summation_value_error(func: typing.Callable, dimensions: typing.Iterabl
     """
     """
     with pytest.raises(ValueError):
-        assert riemann.rsum(func, *dimensions)
+        assert summation.rsum(func, *dimensions)
 
 
 @pytest.mark.parametrize(
@@ -138,7 +138,7 @@ def test_summation_1d(func: typing.Callable, dimensions: typing.Iterable[Dimensi
     :param x:
     :return:
     """
-    assert riemann.rsum(func, *dimensions) == x
+    assert summation.rsum(func, *dimensions) == x
 
 
 @pytest.mark.parametrize(
@@ -192,4 +192,4 @@ def test_summation_2d(func: typing.Callable, dimensions: typing.Iterable[Dimensi
     :param x:
     :return:
     """
-    assert riemann.rsum(func, *dimensions) == x
+    assert summation.rsum(func, *dimensions) == x
