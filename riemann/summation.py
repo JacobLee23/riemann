@@ -34,40 +34,113 @@ arbitrary number of dimensions over a given interval.
 """
 
 from decimal import Decimal
-import functools
 import inspect
 import itertools
+import math
 from numbers import Number
 import typing
 
-from .structures import Dimension
-from .structures import Method
-from .structures import Subintervals
+
+LEFT = lambda x: x.a
+MIDDLE = lambda x: (x.a + x.b) / 2
+RIGHT = lambda x: x.b
 
 
-LEFT = Method("left", lambda x: x.a)
-MIDDLE = Method("middle", lambda x: (x.a + x.b) / 2)
-RIGHT = Method("right", lambda x: x.b)
-
-
-def check_dimensions(f: typing.Callable) -> typing.Callable:
+class Interval:
     """
+    Contains the bounds of an interval.
+
+    :param a: The lower bound of the interval
+    :param b: The upper bound of the interval
+    :return: The number of subdivisions of the interval
     """
-    def wrapper(func: typing.Callable[..., Number], *args):
+    def __init__(self, a: Number, b: Number, k: int):
+        self._a = Decimal(str(a) if isinstance(a, float) else a)
+        self._b = Decimal(str(a) if isinstance(b, float) else b)
+        self._k = k
+
+        self._length = (self.b - self.a) / self.k
+
+    @property
+    def a(self) -> Decimal:
+        """
+        :return: The lower bound of the interval
+        """
+        return self._a
+
+    lower = a
+
+    @property
+    def b(self) -> Decimal:
+        """
+        :return: The upper bound of the interval
+        """
+        return self._b
+
+    upper = b
+
+    @property
+    def k(self) -> int:
+        """
+        :return: The number of subdivisions of the interval
+        """
+        return self._k
+
+    partitions = k
+
+    @property
+    def length(self) -> Decimal:
+        """
+        :return: The length of each of the :math:`k` subdivisions of the interval
+        """
+        return self._length
+
+    def subintervals(self) -> typing.Generator["Interval", None, None]:
         """
         """
-        if len(args) != len(inspect.signature(func).parameters):
+        x = self.a
+
+        for _ in range(self.k):
+            yield Interval(x, x + self.length)
+            x += self.length
+
+
+def normalize_summation(f: typing.Callable) -> typing.Callable:
+    """
+    """
+    def wrapper(
+        func: typing.Callable[..., Number],
+        methods: typing.Sequence[typing.Callable[[Interval], Number]],
+        *args: typing.Union[Interval, typing.Tuple[Number, Number, int]]
+    ):
+        """
+        """
+        if len(methods) == 1:
+            methods = [methods[0] for _ in inspect.signature(func).parameters]
+
+        if len(methods) != len(inspect.signature(func).parameters):
             raise ValueError(
-                "The number of values in 'args' does not equal the number of parameters of 'func'"
+                "The length of 'methods' must equal 1 or the number of parameters of 'func'"
             )
 
-        return f(func, *args)
+        args = [x if isinstance(x, Interval) else Interval(*x) for x in args]
+
+        if len(args) != len(inspect.signature(func).parameters):
+            raise ValueError(
+                "The length of 'args' does not equal the number of parameters of 'func'"
+            )
+
+        return f(func, methods, *args)
 
     return wrapper
 
 
-@check_dimensions
-def riemann_sum(func: typing.Callable[..., Number], *args: Dimension):
+@normalize_summation
+def riemann_sum(
+    func: typing.Callable[..., Number],
+    methods: typing.Sequence[typing.Callable[[Interval], Number]],
+    *args: Interval
+):
     r"""
     Computes the Riemann Sum of functions of several variables over an arbitrary number of
     dimensions over a given interval.
@@ -77,16 +150,14 @@ def riemann_sum(func: typing.Callable[..., Number], *args: Dimension):
     number of dimensions of :math:`f`.
 
     :param func: A function of several real variables
+    :param methods:
     :param args: The parameters of the summation over each of the dimensions
     :return: The value of the Riemann Sum
-    :raise ValueError: The number of dimensions does not equal the number of parameters of ``func``
     """
     # $\Delta V_{i}$
-    delta = functools.reduce(lambda a, b: a * b, (d.subintervals.length for d in args))
+    delta = math.prod(x.length for x in args)
 
-    # Contains generators that yield the values to pass to the ``func``.
-    # Each element represents one of the $n$ dimensions.
-    values = (d.method.partitions(d.subintervals) for d in args)
+    values = (map(f, x.subintervals()) for (f, x) in zip(methods, args))
 
     # Compute the $n$-th dimensional Riemann Sum.
     return (sum(func(*v) for v in itertools.product(*values)) * delta).normalize()
@@ -95,20 +166,19 @@ def riemann_sum(func: typing.Callable[..., Number], *args: Dimension):
 rsum = riemann_sum
 
 
-@check_dimensions
-def trapezoidal_rule(func: typing.Callable[..., Number], *args: Subintervals):
+def trapezoidal_rule(
+    func: typing.Callable[..., Number],
+    *args: typing.Union[Interval, typing.Tuple[Number, Number, int]]
+):
     r"""
 
-    :param func:
-    :param args:
+    :param func: A function of several real variables
+    :param args: The parameters of the summation over each of the dimensions
     :return:
-    :raise ValueError:
     """
-    dimensions = itertools.product(
-        *((Dimension(s.a, s.b, s.k, LEFT), Dimension(s.a, s.b, s.k, RIGHT)) for s in args)
-    )
+    methods = itertools.product((LEFT, RIGHT), repeat=len(args))
 
-    return (sum(riemann_sum(func, *d) for d in dimensions) / Decimal(2) ** len(args)).normalize()
+    return (sum(riemann_sum(func, m, *args) for m in methods) / Decimal(2) ** len(args)).normalize()
 
 
 trule = trapezoidal_rule

@@ -43,9 +43,6 @@ From Wikipedia:
 """
 
 from .summation import LEFT, MIDDLE, RIGHT
+from .summation import Interval
 from .summation import riemann_sum, rsum
 from .summation import trapezoidal_rule, trule
-from .structures import Dimension
-from .structures import Interval
-from .structures import Method
-from .structures import Subintervals
