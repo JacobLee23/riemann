@@ -41,9 +41,9 @@ from numbers import Number
 import typing
 
 
-LEFT = lambda x: x.a
-MIDDLE = lambda x: (x.a + x.b) / 2
-RIGHT = lambda x: x.b
+LEFT = lambda x: x[0]
+MIDDLE = lambda x: (x[0] + x[1]) / 2
+RIGHT = lambda x: x[1]
 
 
 class Interval:
@@ -95,13 +95,13 @@ class Interval:
         """
         return self._length
 
-    def subintervals(self) -> typing.Generator["Interval", None, None]:
+    def subintervals(self) -> typing.Generator[typing.Tuple[Number, Number], None, None]:
         """
         """
         x = self.a
 
         for _ in range(self.k):
-            yield Interval(x, x + self.length)
+            yield (x, x + self.length)
             x += self.length
 
 
