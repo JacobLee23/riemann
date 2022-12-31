@@ -42,7 +42,7 @@ From Wikipedia:
 (Source: `[2] <https://en.wikipedia.org/wiki/Riemann_sum#Arbitrary_number_of_dimensions>`_)
 """
 
-from .summation import LEFT, MIDDLE, RIGHT
+from .methods import left, middle, right
 from .summation import Interval
 from .summation import riemann_sum, rsum
 from .summation import trapezoidal_rule, trule

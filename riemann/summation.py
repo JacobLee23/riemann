@@ -40,10 +40,7 @@ import math
 from numbers import Number
 import typing
 
-
-LEFT = lambda x: x[0]
-MIDDLE = lambda x: (x[0] + x[1]) / 2
-RIGHT = lambda x: x[1]
+from .methods import left, right
 
 
 class Interval:
@@ -176,7 +173,7 @@ def trapezoidal_rule(
     :param args: The parameters of the summation over each of the dimensions
     :return:
     """
-    methods = itertools.product((LEFT, RIGHT), repeat=len(args))
+    methods = itertools.product((left, right), repeat=len(args))
 
     return (sum(riemann_sum(func, m, *args) for m in methods) / Decimal(2) ** len(args)).normalize()
 
