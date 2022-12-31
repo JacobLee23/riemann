@@ -24,7 +24,7 @@ Windows:
 Installing from GitHub
 ----------------------
 
-**Riemann** is actively developed on GitHub: `Source Code <https://github.com/JacobLee23/riemann>`.
+**Riemann** is actively developed on GitHub: `Source Code <https://github.com/JacobLee23/riemann>`_.
 
 First, clone the public repository:
 

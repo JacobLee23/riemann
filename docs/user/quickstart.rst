@@ -16,7 +16,7 @@ Defining a (Mathematical) Function
 
 First, define a function (or ``lambda``) to represent a mathematical function of several real
 variables. The function can take any number of parameters (each of the arguments should be an
-instance of :py:class:`numbers.Number`) and should evaluate to a single :py:class:`numbers.Number`
+instance of :class:`numbers.Number`) and should evaluate to a single :class:`numbers.Number`
 object.
 
 For this example, the one-dimensional function :math:`f(x) = x^{2}` will be used:
@@ -43,7 +43,7 @@ Since ``f`` takes only one parameter, only a single :py:class:`riemann.Dimension
 be created to contain the parameters for the summation of ``f`` over the :math:`x` dimension.
 
 For this example, :math:`f` will be summed over the closed interval :math:`[0, 5]` using 10
-partitions. Furthermore, the left Riemann sum method (:py:data:`riemann..LOWER`) will be used.
+partitions. Furthermore, the left Riemann sum method (:py:data:`riemann.LOWER`) will be used.
 
 .. code-block:: python
 
@@ -66,7 +66,7 @@ There are three common Riemann sum methods, which all have built-in support:
 - Right Riemann Sum: :py:data:`riemann.RIGHT`
 
 However, custom Riemann sum methods can be defined using the :py:class:`riemann.Method` class.
-:py:class:`riemann.Method` is a ``dataclass`` (:py:func:`dataclasses.dataclass`) that takes two
+:py:class:`riemann.Method` is a ``dataclass`` (:func:`dataclasses.dataclass`) that takes two
 parameters: :py:attr:`riemann.Method.name` and :py:attr:`riemann.Method.func`.
 
 For example, the left, middle, and right Riemann Sum methods are defined as follows:
@@ -90,13 +90,13 @@ Computing the Riemann Sum
 -------------------------
 
 Once the function, dimension parameters, and (optional) Riemann Sum methods have been defined, the
-Riemann sum itself can then be computed, using the :py:meth:`riemann.rsum` function. Simply call
-the function, passing the callable object followed by the :math:`n` :py:class:`riemann.Dimension`
-objects. The output is a single :py:class:`decimal.Decimal` object.
+Riemann sum itself can then be computed, using the :py:meth:`riemann.riemann_sum` function. Simply
+call the function, passing the callable object followed by the :math:`n`
+:py:class:`riemann.Dimension` objects. The output is a single :class:`decimal.Decimal` object.
 
 .. code-block::
 
-    >>> riemann.rsum(f, dim_x)
+    >>> riemann.riemann_sum(f, dim_x)
     Decimal('35.625')
 
 Generalization
@@ -145,11 +145,11 @@ along the :math:`x_{2}` axis, etc.
 3. **Computing the Riemann Sum**
 
 Once the function and all :math:`n` :py:class:`riemann.Dimension` objects have been defined, the
-:py:func:`riemann.rsum` function is called, passing the callable object of :math:`n` parameters
-followed by the :math:`n` :py:class:`riemann.Dimension` objects. The result again is a single
-:py:class:`decimal.Decimal` object.
+:py:func:`riemann.riemann_sum` function is called, passing the callable object of :math:`n`
+parameters followed by the :math:`n` :py:class:`riemann.Dimension` objects. The result again is a
+single :class:`decimal.Decimal` object.
 
 .. code-block:: python
 
-    >>> riemann.rsum(f, dim_x1, dim_x2, ..., dim_xn)
+    >>> riemann.riemann_sum(f, dim_x1, dim_x2, ..., dim_xn)
     Decimal(...)

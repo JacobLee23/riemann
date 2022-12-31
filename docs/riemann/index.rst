@@ -1,0 +1,4 @@
+``riemann``
+===========
+
+.. automodule:: riemann
