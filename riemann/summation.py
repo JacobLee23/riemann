@@ -40,7 +40,11 @@ import math
 from numbers import Number
 import typing
 
-from .methods import left, right
+
+Method = type("Method", (), {})
+LEFT = type("Left", (Method,), {})()
+MIDDLE = type("Middle", (Method,), {})()
+RIGHT = type("Right", (Method,), {})()
 
 
 class Interval:
@@ -92,23 +96,34 @@ class Interval:
         """
         return self._length
 
-    def subintervals(self) -> typing.Generator[typing.Tuple[Number, Number], None, None]:
+    def subintervals(self, method: Method) -> typing.Generator[Number, None, None]:
         """
+        :param method:
+        :return:
+        :raise ValueError:
         """
-        x = self.a
+        x, dx = self.a, self.length
 
         for _ in range(self.k):
-            yield (x, x + self.length)
-            x += self.length
+            if method is LEFT:
+                yield x
+            elif method is MIDDLE:
+                yield (2 * x + dx) / 2
+            elif method is RIGHT:
+                yield x + dx
+            else:
+                raise ValueError(
+                    "Unknown Riemann sum method used"
+                )
+
+            x += dx
 
 
 def normalize_summation(f: typing.Callable) -> typing.Callable:
     """
     """
     def wrapper(
-        func: typing.Callable[..., Number],
-        methods: typing.Sequence[typing.Callable[[Interval], Number]],
-        *args: typing.Union[Interval, typing.Tuple[Number, Number, int]]
+        func: typing.Callable[..., Number], methods: typing.Sequence[Method], *args: Interval
     ):
         """
         """
@@ -134,9 +149,7 @@ def normalize_summation(f: typing.Callable) -> typing.Callable:
 
 @normalize_summation
 def riemann_sum(
-    func: typing.Callable[..., Number],
-    methods: typing.Sequence[typing.Callable[[Interval], Number]],
-    *args: Interval
+    func: typing.Callable[..., Number], methods: typing.Sequence[Method], *args: Interval
 ):
     r"""
     Computes the Riemann Sum of functions of several variables over an arbitrary number of
@@ -154,7 +167,7 @@ def riemann_sum(
     # $\Delta V_{i}$
     delta = math.prod(x.length for x in args)
 
-    values = (map(f, x.subintervals()) for (f, x) in zip(methods, args))
+    values = (x.subintervals(m) for m, x in zip(methods, args))
 
     # Compute the $n$-th dimensional Riemann Sum.
     return (sum(func(*v) for v in itertools.product(*values)) * delta).normalize()
@@ -173,7 +186,7 @@ def trapezoidal_rule(
     :param args: The parameters of the summation over each of the dimensions
     :return:
     """
-    methods = itertools.product((left, right), repeat=len(args))
+    methods = itertools.product((LEFT, RIGHT), repeat=len(args))
 
     return (sum(riemann_sum(func, m, *args) for m in methods) / Decimal(2) ** len(args)).normalize()
 
