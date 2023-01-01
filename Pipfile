@@ -9,12 +9,10 @@ furo = "*"
 [dev-packages]
 twine = "*"
 build = "*"
-pytest = "*"
 vermin = "*"
 pylint = "*"
 sphinx = "*"
-tox = "*"
-pytest-cov = "*"
+furo = "*"
 
 [requires]
 python_version = "3.11"
