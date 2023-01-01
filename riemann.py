@@ -1,75 +1,41 @@
 r"""
 Computes the Riemann Sum of functions of several variables over an arbitrary number of dimensions
 over a given interval.
-
 From Wikipedia:
-
     Let :math:`f: [a,b] \rightarrow \mathbb{R}` be a function defined on a closed interval
     :math:`[a,b]` of the real numbers, :math:`\mathbb(R)`, and
-
     .. math::
-
         P = \{[x_{0},x_{1}], [x_{1},x_{2}], \dots , [x_{n-1},x_{n}]\},
-
     be a partition of :math:`I`, where
-
     .. math::
-
         a = x_{0} < x_{1} < x_{2} < \dots < x_{n} = b.
-
     A Riemann sum of :math:`S` of :math:`f` over :math:`I` with partition :math:`P` is defined as
-
     .. math::
-
         S = \sum_{i=1}^{n} f(x_{i}^{*}) \Delta x_{i}
-
     where :math:`\Delta x_{i} = x_{i} - x_{i-1}` and :math:`x_{i}^{*} \in [x_{i-1},x_{i}]`.
-
 (Source: `[1] <https://en.wikipedia.org/wiki/Riemann_sum#Definition>`_)
-
 From Wikipedia:
-
     Higher dimensional Riemann sums follow a similar pattern as from one to two to three dimensions.
     For an arbitrary dimension, :math:`n`, a Riemann sum can be written as
-
     .. math::
-
         S = \sum_{i=1}^{n} f(P_{i}^{*}) \Delta V_{i}
-
     where :math:`P_{i}^{*} \in V_{i}`, that is, it's a point in the :math:`n`-dimensional cell
     :math:`V_{i}` with :math:`n`-dimensional volume :math:`\Delta V_{i}`.
-
 (Source: `[2] <https://en.wikipedia.org/wiki/Riemann_sum#Arbitrary_number_of_dimensions>`_)
-
-
 .. py:data:: LEFT
-
     Specifies that the Left Riemann Sum method should be used over the corresopnding dimension.
-
     .. math::
-
         x_{i}^{*} = a+i\Delta x, \Delta x=\frac{b-a}{n}, i \in \{0,1,\dots,n-1\}
-
     :type: Method
-
 .. py:data:: MIDDLE
-
     Specifices that the Middle Riemann Sum method should be used over the corresponding dimension.
-
     .. math::
-
         x_{i}^{*} = a+\frac{2i+1}{2}\Delta x, \Delta x=\frac{b-a}{n}, i \in \{0,1,\dots,n-1\}
-
     :type: Method
-
 .. py:data:: RIGHT
-
     Specifies that the Right Riemann Sum method should be used over the corresopnding dimension.
-
     .. math::
-
         x_{i}^{*} = a+(i+1)\Delta x, \Delta x = \frac{b-a}{n}, i \in \{0,\dots,n-1\}
-
     :type: Method
 """
 
@@ -90,7 +56,6 @@ RIGHT = type("Right", (Method,), {})()
 class Interval:
     """
     Contains the bounds of an interval.
-
     :param a: The lower bound of the interval
     :param b: The upper bound of the interval
     :return: The number of subdivisions of the interval
@@ -194,11 +159,9 @@ def riemann_sum(
     r"""
     Computes the Riemann Sum of functions of several variables over an arbitrary number of
     dimensions over a given interval.
-
     Parameter ``func`` can be written as :math:`f: {\mathbb{R}}^{n} \rightarrow \mathbb{R}`. The
     number of items in ``args`` must equal :math:`n`, the number of parameters of ``func`` and the
     number of dimensions of :math:`f`.
-
     :param func: A function of several real variables
     :param methods:
     :param args: The parameters of the summation over each of the dimensions
@@ -221,7 +184,6 @@ def trapezoidal_rule(
     *args: typing.Union[Interval, typing.Tuple[Number, Number, int]]
 ):
     r"""
-
     :param func: A function of several real variables
     :param args: The parameters of the summation over each of the dimensions
     :return:
