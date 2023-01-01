@@ -17,9 +17,9 @@ interval :math:`[0, 1]` using 10 partitions along the :math:`x` axis.
     >>> from riemann import Interval
     >>> f = lambda x: x ** 2
     >>> var_x = Interval(0, 1, 10)
-    >>> dim_x
+    >>> var_x
     Interval(a=0, b=1, k=10)
-    >>> riemann.rsum(f, [riemann.LEFT], var_x)
+    >>> riemann.rsum(f, [var_x], [riemann.LEFT]) 
     Decimal('0.285')
 
 However, **Riemann** is not restricted to computing Riemann sums only over one dimension. A similar
@@ -40,12 +40,16 @@ partitions along the :math:`x` axis and 10 partitions along the :math:`y` axis.
     Interval(a=0, b=1, k=10)
     >>> var_y
     Interval(a=0, b=1, k=10)
-    >>> riemann.rsum(f, [LEFT, LEFT], dim_x, dim_y)
-    Decimal('56.6048')
+    >>> riemann.rsum(f, [var_x, var_y], [riemann.LEFT, riemann.LEFT]) 
+    Decimal('0.57')
+    >>> riemann.rsum(f, [var_x, var_y], [riemann.LEFT])               
+    Decimal('0.57')
 
-The sole requirement is that the number of parameters taken by the function passed as the ``func``
-argument to :py:func:`riemann.rsum` equals the number of :py:class:`riemann.Dimension` objects
-passed.
+The number of elements in the sequence passed as the second argument to :py:class:`riemann.rsum`
+must equal the number of parameters taken by the function passed as the first argument to the
+function. The number of elements in the sequence passed as the third argument to
+:py:class:`riemann.rsum` must equal 1 or the number of parameters taken by the function passed as
+the first argument to the function.
 
 Features
 --------
@@ -53,7 +57,6 @@ Features
 - Fast computation of Riemann sum.
 - Support for computation of multi-dimensional Riemann sum.
 - Built-in support for left, middle, and right Riemann sum methods.
-- Support for custom Riemann sum methods (using the :py:class:`riemann.Method` class).
 
 User Guide
 ----------
