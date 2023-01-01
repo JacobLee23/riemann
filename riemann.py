@@ -128,7 +128,9 @@ def normalize_summation(f: typing.Callable) -> typing.Callable:
     """
     """
     def wrapper(
-        func: typing.Callable[..., Number], intervals: typing.Sequence[Interval], *args: Method
+        func: typing.Callable[..., Number],
+        intervals: typing.Sequence[Interval],
+        methods: typing.Sequence[Method]
     ):
         """
         """
@@ -139,22 +141,24 @@ def normalize_summation(f: typing.Callable) -> typing.Callable:
                 "The length of 'intervals' does not equal the number of parameters of 'func'"
             )
 
-        if len(args) == 1:
-            args = [args[0] for _ in inspect.signature(func).parameters]
+        if len(methods) == 1:
+            methods = [methods[0] for _ in inspect.signature(func).parameters]
 
-        if len(args) != len(inspect.signature(func).parameters):
+        if len(methods) != len(inspect.signature(func).parameters):
             raise ValueError(
                 "The length of 'args' must equal 1 or the number of parameters of 'func'"
             )
 
-        return f(func, intervals, *args)
+        return f(func, intervals, methods)
 
     return wrapper
 
 
 @normalize_summation
 def riemann_sum(
-    func: typing.Callable[..., Number], intervals: typing.Sequence[Interval], *args: Method
+    func: typing.Callable[..., Number],
+    intervals: typing.Sequence[Interval],
+    methods: typing.Sequence[Method]
 ):
     r"""
     Computes the Riemann Sum of functions of several variables over an arbitrary number of
@@ -166,13 +170,13 @@ def riemann_sum(
 
     :param func: A function of several real variables
     :param intervals: The parameters of the summation over each of the dimensions
-    :param args: 
+    :param methods: 
     :return: The value of the Riemann Sum
     """
     # $\Delta V_{i}$
     delta = math.prod(x.length for x in intervals)
 
-    values = (x.subintervals(m) for x, m in zip(intervals, args))
+    values = (x.subintervals(m) for x, m in zip(intervals, methods))
 
     # Compute the $n$-th dimensional Riemann Sum.
     return (sum(func(*v) for v in itertools.product(*values)) * delta).normalize()
@@ -194,7 +198,7 @@ def trapezoidal_rule(
 
     ncombinations = Decimal(2) ** len(intervals)
 
-    return (sum(riemann_sum(func, intervals, *m) for m in methods) / ncombinations).normalize()
+    return (sum(riemann_sum(func, intervals, m) for m in methods) / ncombinations).normalize()
 
 
 trule = trapezoidal_rule
