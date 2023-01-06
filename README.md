@@ -45,7 +45,7 @@ Decimal('0.57')
 
 ## Requirements
 
-**Riemann** requires Python 3.7+. This project does not require any additional dependencies.
+**Riemann** requires Python 3.5+. This project does not require any additional dependencies.
 
 ## Installation
 
