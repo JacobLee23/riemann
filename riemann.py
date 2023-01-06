@@ -110,7 +110,7 @@ class Interval:
         """
         return self._length
 
-    def subintervals(self, method: Method) -> typing.Generator[Number, None, None]:
+    def subintervals(self, method: Method) -> typing.Generator[Decimal, None, None]:
         """
         :param method:
         :return:
@@ -182,12 +182,9 @@ def riemann_sum(
     :param methods: 
     :return: The value of the Riemann Sum
     """
-    # $\Delta V_{i}$
     delta = functools.reduce(operator.mul, (x.length for x in intervals))
-
     values = (x.subintervals(m) for x, m in zip(intervals, methods))
 
-    # Compute the $n$-th dimensional Riemann Sum.
     return (sum(func(*v) for v in itertools.product(*values)) * delta).normalize()
 
 
@@ -204,7 +201,6 @@ def trapezoidal_rule(
     :return:
     """
     methods = itertools.product((LEFT, RIGHT), repeat=len(intervals))
-
     ncombinations = Decimal(2) ** len(intervals)
 
     return (sum(riemann_sum(func, intervals, m) for m in methods) / ncombinations).normalize()
