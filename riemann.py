@@ -43,10 +43,11 @@ From Wikipedia:
 """
 
 from decimal import Decimal
+import functools
 import inspect
 import itertools
-import math
 from numbers import Number
+import operator
 import typing
 
 
@@ -71,7 +72,9 @@ class Interval:
         self._length = (self.b - self.a) / self.k
 
     def __repr__(self):
-        return f"{type(self).__name__}(a={self.a}, b={self.b}, k={self.k})"
+        return "{}(a={}, b={}, k={})".format(
+            type(self).__name__, self.a, self.b, self.k
+        )
 
     @property
     def a(self) -> Decimal:
@@ -180,7 +183,7 @@ def riemann_sum(
     :return: The value of the Riemann Sum
     """
     # $\Delta V_{i}$
-    delta = math.prod(x.length for x in intervals)
+    delta = functools.reduce(operator.mul, (x.length for x in intervals))
 
     values = (x.subintervals(m) for x, m in zip(intervals, methods))
 
