@@ -60,6 +60,7 @@ RIGHT = type("Right", (Method,), {})()
 class Interval:
     """
     Contains the bounds of an interval.
+
     :param a: The lower bound of the interval
     :param b: The upper bound of the interval
     :return: The number of subdivisions of the interval
@@ -110,11 +111,14 @@ class Interval:
         """
         return self._length
 
-    def subintervals(self, method: Method) -> typing.Generator[Decimal, None, None]:
+    def partitions(self, method: Method) -> typing.Generator[Decimal, None, None]:
         """
+        Generates the values of the independent variable at each of the :py:attr:`k` partitions in
+        the interval.
+
         :param method:
         :return:
-        :raise ValueError:
+        :raise ValueError: An unknown Riemann sum method was passed
         """
         x, dx = self.a, self.length
 
