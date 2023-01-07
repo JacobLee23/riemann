@@ -7,11 +7,13 @@ variables.
 -------------------------
 
 **Riemann** provides an intuitive syntax for calculating the Riemann sum of a function over a
-closed interval. The below code snippet computes the Riemann sum of :math:`f(x) = x^{2}` over the
-interval :math:`[0, 1]` using 10 partitions along the :math:`x` axis.
+closed interval.
+
+Below is an example that computes the Riemann sum of the function :math:`f(x) = x^{2}` over the
+closed interval :math:`[0, 1]` using 10 partitions along the :math:`x` axis.
 
 .. doctest::
-    :pyversion: > 3.5
+    :pyversion: > 3.8
 
     >>> import riemann
     >>> from riemann import Interval
@@ -21,14 +23,12 @@ interval :math:`[0, 1]` using 10 partitions along the :math:`x` axis.
     >>> riemann.rsum(f, intervals, methods)
     Decimal('0.285')
 
-However, **Riemann** is not restricted to computing Riemann sums only over one dimension. A similar
-syntax can be used to calculate the Riemann sum of a function of several real variables over a
-closed multi-dimensional interval. The below code snippet computes the Riemann sum of
-:math:`f(x, y) = x^{2} + y^{2}` over the interval :math:`x \in [0, 1], y \in [0, 1]` using 10
-partitions along the :math:`x` axis and 10 partitions along the :math:`y` axis.
+Below is an example that computes the Riemann sum of the function :math:`f(x, y) = x^{2} + y^{2}`
+over the the closed interal :math:`x \in [0, 1] y \in [0, 1]` using 10 partitions along the
+:math:`x` axis and 10 partitions along the :math:`y` axis.
 
 .. doctest::
-    :pyversion: > 3.5
+    :pyversion: > 3.8
 
     >>> import riemann
     >>> from riemann import Interval
@@ -37,6 +37,24 @@ partitions along the :math:`x` axis and 10 partitions along the :math:`y` axis.
     >>> methods = [riemann.LEFT, riemann.LEFT]
     >>> riemann.rsum(f, intervals, methods)
     Decimal('0.57')
+
+Below is an example that computes the Riemann sum of the function :math:`f(x, y) = x^{2} + y^{2}`
+over the closed interval :math:`x \in [0, 1], y \in [0, 1], z \in [0, 1]` using 10 partitions
+along the :math:`x` axis, 10 partitions along the :math:`y` axis, and 10 partitions along the
+:math:`z` axis.
+
+.. doctest::
+    :pyversion: > 3.8
+
+    >>> import riemann
+    >>> from riemann import Interval
+    >>> f = lambda x, y, z: x ** 2 + y ** 2 + z ** 2
+    >>> intervals = [Interval(0, 1, 10), Interval(0, 1, 10), Interval(0, 1, 10)]
+    >>> methods = [riemann.LEFT, riemann.LEFT, riemann.LEFT]
+    >>> riemann.rsum(f, intervals, methods)
+    Decimal('0.855')
+
+See :doc:`/user/quickstart` for more examples and more in-depth explanation.
 
 Features
 --------
