@@ -6,23 +6,23 @@ From Wikipedia:
 
     Let :math:`f: [a,b] \rightarrow \mathbb{R}` be a function defined on a closed interval
     :math:`[a,b]` of the real numbers, :math:`\mathbb(R)`, and
-    
+
     .. math::
-    
+
         P = \{[x_{0},x_{1}], [x_{1},x_{2}], \dots , [x_{n-1},x_{n}]\},
-    
+
     be a partition of :math:`I`, where
-    
+
     .. math::
-    
+
         a = x_{0} < x_{1} < x_{2} < \dots < x_{n} = b.
-    
+
     A Riemann sum of :math:`S` of :math:`f` over :math:`I` with partition :math:`P` is defined as
-    
+
     .. math::
-    
+
         S = \sum_{i=1}^{n} f(x_{i}^{*}) \Delta x_{i}
-    
+
     where :math:`\Delta x_{i} = x_{i} - x_{i-1}` and :math:`x_{i}^{*} \in [x_{i-1},x_{i}]`.
 
 (Source: `[1] <https://en.wikipedia.org/wiki/Riemann_sum#Definition>`_)
@@ -31,11 +31,11 @@ From Wikipedia:
 
     Higher dimensional Riemann sums follow a similar pattern as from one to two to three dimensions.
     For an arbitrary dimension, :math:`n`, a Riemann sum can be written as
-    
+
     .. math::
-    
+
         S = \sum_{i=1}^{n} f(P_{i}^{*}) \Delta V_{i}
-    
+
     where :math:`P_{i}^{*} \in V_{i}`, that is, it's a point in the :math:`n`-dimensional cell
     :math:`V_{i}` with :math:`n`-dimensional volume :math:`\Delta V_{i}`.
 
@@ -51,7 +51,19 @@ import operator
 import typing
 
 
-Method = type("Method", (), {})
+@typing.runtime_checkable
+class FunctionSRV(typing.Protocol):
+    """
+    Callable type that represents a function of several real variables.
+    """
+    def __call__(self, *args: Number) -> Number: ...
+
+
+class Method:
+    """
+    """
+
+
 LEFT = type("Left", (Method,), {})()
 MIDDLE = type("Middle", (Method,), {})()
 RIGHT = type("Right", (Method,), {})()
@@ -65,44 +77,41 @@ class Interval:
     :param b: The upper bound of the interval
     :return: The number of subdivisions of the interval
     """
-    def __init__(self, a: Number, b: Number, k: int):
-        self._a = Decimal(str(a) if isinstance(a, float) else a)
-        self._b = Decimal(str(a) if isinstance(b, float) else b)
-        self._k = k
+    def __init__(self, lower: Number, upper: Number, npartitions: int):
+        self._lower = Decimal(str(lower) if isinstance(lower, float) else lower)
+        self._upper = Decimal(str(upper) if isinstance(upper, float) else upper)
+        self._npartitions = npartitions
 
-        self._length = (self.b - self.a) / self.k
+        self._length = (self.upper - self.lower) / self.npartitions
 
     def __repr__(self):
-        return "{}(a={}, b={}, k={})".format(
-            type(self).__name__, self.a, self.b, self.k
+        return "{}(lower={}, upper={}, npartitions={})".format(
+            type(self).__name__,
+            self.lower,
+            self.upper,
+            self.npartitions
         )
 
     @property
-    def a(self) -> Decimal:
+    def lower(self) -> Decimal:
         """
         :return: The lower bound of the interval
         """
-        return self._a
-
-    lower = a
+        return self._lower
 
     @property
-    def b(self) -> Decimal:
+    def upper(self) -> Decimal:
         """
         :return: The upper bound of the interval
         """
-        return self._b
-
-    upper = b
+        return self._upper
 
     @property
-    def k(self) -> int:
+    def npartitions(self) -> int:
         """
         :return: The number of subdivisions of the interval
         """
-        return self._k
-
-    partitions = k
+        return self._npartitions
 
     @property
     def length(self) -> Decimal:
@@ -120,30 +129,28 @@ class Interval:
         :return:
         :raise ValueError: An unknown Riemann sum method was passed
         """
-        x, dx = self.a, self.length
+        lower, length = self.lower, self.length
 
-        for _ in range(self.k):
+        for _ in range(self.npartitions):
             if method is LEFT:
-                yield x
+                yield lower
             elif method is MIDDLE:
-                yield (2 * x + dx) / 2
+                yield (2 * lower + length) / 2
             elif method is RIGHT:
-                yield x + dx
+                yield lower + length
             else:
                 raise ValueError(
                     "Unknown Riemann sum method used"
                 )
 
-            x += dx
+            lower += length
 
 
-def normalize_summation(f: typing.Callable) -> typing.Callable:
+def normalize_summation(function: typing.Callable) -> typing.Callable:
     """
     """
     def wrapper(
-        func: typing.Callable[..., Number],
-        intervals: typing.Sequence[Interval],
-        methods: typing.Sequence[Method]
+        func: FunctionSRV, intervals: typing.Sequence[Interval], methods: typing.Sequence[Method]
     ):
         """
         """
@@ -162,16 +169,14 @@ def normalize_summation(f: typing.Callable) -> typing.Callable:
                 "The length of 'args' must equal 1 or the number of parameters of 'func'"
             )
 
-        return f(func, intervals, methods)
+        return function(func, intervals, methods)
 
     return wrapper
 
 
 @normalize_summation
 def riemann_sum(
-    func: typing.Callable[..., Number],
-    intervals: typing.Sequence[Interval],
-    methods: typing.Sequence[Method]
+    func: FunctionSRV, intervals: typing.Sequence[Interval], methods: typing.Sequence[Method]
 ):
     r"""
     Computes the Riemann Sum of functions of several variables over an arbitrary number of
@@ -183,7 +188,7 @@ def riemann_sum(
 
     :param func: A function of several real variables
     :param intervals: The parameters of the summation over each of the dimensions
-    :param methods: 
+    :param methods:
     :return: The value of the Riemann Sum
     """
     delta = functools.reduce(operator.mul, (x.length for x in intervals))
@@ -196,8 +201,7 @@ rsum = riemann_sum
 
 
 def trapezoidal_rule(
-    func: typing.Callable[..., Number],
-    intervals: typing.Union[Interval, typing.Tuple[Number, Number, int]]
+    func: FunctionSRV, intervals: typing.Union[Interval, typing.Tuple[Number, Number, int]]
 ):
     r"""
     :param func: A function of several real variables
