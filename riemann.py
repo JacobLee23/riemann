@@ -49,7 +49,7 @@ import typing
 @typing.runtime_checkable
 class FunctionSRV(typing.Protocol):
     r"""
-    Callable type that represents a function of several real variables. Subclass of
+    Callable type that represents a function of several real variables. Inherits from
     :class:`typing.Protocol`.
 
     .. math::
@@ -100,7 +100,7 @@ class RSumMethod:
 class Left(RSumMethod):
     r"""
     Specifies that the Left Riemann Sum method should be used over the corresponding dimension.
-    Subclass of :py:class:`RSumMethod`.
+    Inherits from :py:class:`RSumMethod`.
 
     .. math::
 
@@ -113,7 +113,7 @@ class Left(RSumMethod):
 class Middle(RSumMethod):
     r"""
     Specifies that the Middle Riemann Sum method should be used over the corresponding dimension.
-    Subclass of :py:class:`RSumMethod`.
+    Inherits from :py:class:`RSumMethod`.
 
     .. math::
 
@@ -126,7 +126,7 @@ class Middle(RSumMethod):
 class Right(RSumMethod):
     r"""
     Specifies that the Right Riemann Sum method should be used over the corresponding dimension.
-    Subclass of :py:class:`RSumMethod`.
+    Inherits from :py:class:`RSumMethod`.
 
     .. math::
 
@@ -189,11 +189,8 @@ class Interval:
 
     def partitions(self, method: RSumMethod) -> typing.Generator[Decimal, None, None]:
         """
-        Generates the values of the independent variable at each of the :py:attr:`k` partitions in
-        the interval.
-
-        :param method:
-        :return:
+        :param method: The method to use for calculating the Riemann sum
+        :return: A generator of the values of each partition of the interval
         """
         lower, length = self.lower, self.length
 
@@ -207,30 +204,39 @@ def riemann_sum(
     function: FunctionSRV, intervals: typing.Sequence[Interval], methods: typing.Sequence[RSumMethod]
 ):
     r"""
-    Computes the Riemann Sum of functions of several variables over an arbitrary number of
-    dimensions over a given interval.
+    Computes the Riemann Sum of a function of several variables over a closed multidimensional
+    interval using indicated Riemann sum methods.
 
-    Parameter ``function`` can be written as :math:`f: {\mathbb{R}}^{n} \rightarrow \mathbb{R}`. The
-    number of items in ``args`` must equal :math:`n`, the number of parameters of ``func`` and the
-    number of dimensions of :math:`f`.
+    The number of parameters of ``function``, the number of elements in ``intervals``, and the
+    number of elements in ``methods`` all must be equal. In other words, every parameter in
+    ``function`` must correspond to exactly one element in ``intervals`` and one element in
+    ``methods``.
 
-    :param function: A function of several real variables
-    :param intervals: The parameters of the summation over each of the dimensions
-    :param methods:
-    :return: The value of the Riemann Sum
-    :raise ValueError: The number of elements in ``intervals``, elements in ``methods``, and parameters of ``function`` are not all equal
+    .. note::
+
+        The order of ``intervals`` and ``methods`` are significant.
+
+        The first parameter of ``function`` corresponds to ``intervals[0]`` and ``methods[0]``, the
+        second to ``intervals[1]`` and ``methods[1]``, the third to ``intervals[2]`` and
+        ``methods[2]``, etc.
+
+    :param function: A callable object representing function of several real variables
+    :param intervals: The closed intervals over which the Riemann sum is calculated
+    :param methods: The methods to use for calculating the Riemann sum
+    :return: The value of the Riemann Sum over the indicated intervals using the indicated methods
+    :raise ValueError: Length of the ``function`` parameter list, ``intervals``, and ``methods`` are unequal
     """
     ndimensions = len(inspect.signature(function).parameters)
 
     intervals = [x if isinstance(x, Interval) else Interval(*x) for x in intervals]
     if len(intervals) != ndimensions:
         raise ValueError(
-            "The length of 'intervals' must equal the number of parameters of 'function'"
+            "The length of 'intervals' and the 'function' parameter list must be equal"
         )
 
     if len(methods) != ndimensions:
         raise ValueError(
-            "The length of 'methods' must equal the number of parameters of 'function'"
+            "The length of 'methods' and the 'function' parameter list must be equal"
         )
 
     delta = functools.reduce(operator.mul, (x.length for x in intervals))
@@ -243,9 +249,23 @@ def trapezoidal_rule(
     function: FunctionSRV, intervals: typing.Sequence[Interval]
 ):
     r"""
-    :param function: A function of several real variables
-    :param intervals: The parameters of the summation over each of the dimensions
-    :return:
+    Computes the Riemann Sum of a function of several variables over a closed multidimensional
+    interval using the trapezoidal rule.
+
+    The number of parameters of ``function`` and the number of elements in ``intervals`` must be
+    equal. In other words, every parameter in ``function`` must correspond to exactly one element
+    in ``intervals``.
+
+    .. note::
+
+        The order of ``intervals`` is significant.
+
+        The first parameter of ``function`` corresponds to ``intervals[0]``, the second to
+        ``intervals[1]``, the third to ``intervals[2]``, etc.
+
+    :param function: A callable object representing function of several real variables
+    :param intervals: The closed intervals over which the Riemann sum is calculated
+    :return: The value of the Riemann sum over the indicated intervals using the trapezoidal rule
     """
     methods = itertools.product((Left, Right), repeat=len(intervals))
     ncombinations = Decimal(2) ** len(intervals)
