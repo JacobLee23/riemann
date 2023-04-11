@@ -3,7 +3,31 @@
 Quickstart
 ==========
 
-Below is a simple example for using the **Riemann** package.
+Below are some simple example for using the **Riemann** package.
+
+*****
+
+.. doctest::
+    :pyversion: >= 3.8
+
+    >>> import riemann
+    >>> from riemann import Interval
+    >>> f = lambda x: x ** 2
+    >>> intervals = [
+    ...     Interval(0, 1, 10)      # x: [0, 1], 10 partitions
+    ... ]
+    >>> methods = [
+    ...     riemann.LEFT            # x: Left Riemann Sum
+    ... ]
+    >>> riemann.rsum(f, intervals, methods)
+    Decimal('0.285')
+
+The above computes the Riemann Sum of the mathematical function :math:`x^{2}` for
+:math:`x \in \[0, \]`, using 10 partitions and the Left Riemann Sum method along the :math:`x`
+axis.
+
+*****
+
 
 Begin by importing the ``riemann`` package:
 
@@ -25,7 +49,7 @@ For this example, the one-dimensional function :math:`f(x) = x^{2}` will be used
 
     >>> from numbers import Number
     >>> def f(x: Number) -> Number:
-            return x ** 2
+    ...     return x ** 2
 
 Similarly, using ``lambda`` syntax:
 
@@ -33,10 +57,10 @@ Similarly, using ``lambda`` syntax:
 
     >>> f = lambda x: x ** 2
 
-Defining Dimension Parameters
------------------------------
+Defining Interval Parameters
+----------------------------
 
-For each parameter taken by ``f``, a :py:class:`riemann.Dimension` object must be created, which
+For each parameter taken by ``f``, a :py:class:`riemann.Interval` object must be created, which
 will contain the parameters for the summation of ``f`` over the corresponding dimension.
 
 Since ``f`` takes only one parameter, only a single :py:class:`riemann.Dimension` object needs to

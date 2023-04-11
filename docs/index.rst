@@ -1,51 +1,59 @@
 Riemann Documentation
 ======================
 
-**Riemann** is a pure-Python package for computing the Riemann summation of functions in
-:math:`n`-dimensional space.
+**Riemann**, a pure-Python package for computing :math:`n`-dimensional Riemann sums.
 
 -------------------------
 
-**Riemann** provides an intuitive syntax for calculating the Riemann sum of a function over a
-closed interval. The below code snippet computes the Riemann sum of :math:`f(x) = x^{2}` over the
-interval :math:`[0, 2]` using 10 partitions along the :math:`x` axis.
+**Riemann** provides an intuitive syntax for calculating the Riemann sum of a function of several
+real variables over a closed multi-dimensional interval.
+
+Below is an example that computes the Riemann sum of the function :math:`f(x) = x^{2}` over the
+closed interval :math:`[0, 1]` using 10 partitions along the :math:`x` axis.
 
 .. doctest::
-    :pyversion: > 3.7
+    :pyversion: > 3.8
 
     >>> import riemann
-    >>> from riemann import Dimension
+    >>> from riemann import Interval
     >>> f = lambda x: x ** 2
-    >>> dim_x = Dimension(0, 2, 10, riemann.LEFT)
-    >>> dim_x
-    Dimension(a=0, b=2, n=10, method=Method(name='lower'))
-    >>> riemann.rsum(f, dim_x)
-    Decimal('2.28')
+    >>> intervals = [Interval(0, 1, 10)]
+    >>> methods = [riemann.Left]
+    >>> riemann.riemann_sum(f, intervals, methods)
+    Decimal('0.285')
 
-However, **Riemann** is not restricted to computing Riemann sums only over one dimension. A similar
-syntax can be used to calculate the Riemann sum of a function of several real variables over a
-closed multi-dimensional interval. The below code snippet computes the Riemann sum of
-:math:`f(x, y) = x^{2} y^{2}` over the interval :math:`x \in [0, 2], y \in [0, 4]` using 10
-partitions along the :math:`x` axis and 10 partitions along the :math:`y` axis.
+Below is an example that computes the Riemann sum of the function :math:`f(x, y) = x^{2} + y^{2}`
+over the the closed interal :math:`x \in [0, 1] y \in [0, 1]` using 10 partitions along the
+:math:`x` axis and 10 partitions along the :math:`y` axis.
 
 .. doctest::
-    :pyversion: > 3.7
+    :pyversion: > 3.8
 
     >>> import riemann
-    >>> from riemann import Dimension
-    >>> f = lambda x, y: (x ** 2) * (y ** 2)
-    >>> dim_x = Dimension(0, 2, 10, riemann.MIDDLE)
-    >>> dim_x
-    Dimension(a=0, b=2, n=10, method=Method(name='middle'))
-    >>> dim_y = Dimension(0, 4, 10, riemann.MIDDLE)
-    >>> dim_y
-    Dimension(a=0, b=4, n=10, method=Method(name='middle'))
-    >>> riemann.rsum(f, dim_x, dim_y)
-    Decimal('56.6048')
+    >>> from riemann import Interval
+    >>> f = lambda x, y: x ** 2 + y ** 2
+    >>> intervals = [Interval(0, 1, 10), Interval(0, 1, 10)]
+    >>> methods = [riemann.Left, riemann.Left]
+    >>> riemann.riemann_sum(f, intervals, methods)
+    Decimal('0.57')
 
-The sole requirement is that the number of parameters taken by the function passed as the ``func``
-argument to :py:func:`riemann.rsum` equals the number of :py:class:`riemann.Dimension` objects
-passed.
+Below is an example that computes the Riemann sum of the function :math:`f(x, y) = x^{2} + y^{2}`
+over the closed interval :math:`x \in [0, 1], y \in [0, 1], z \in [0, 1]` using 10 partitions
+along the :math:`x` axis, 10 partitions along the :math:`y` axis, and 10 partitions along the
+:math:`z` axis.
+
+.. doctest::
+    :pyversion: > 3.8
+
+    >>> import riemann
+    >>> from riemann import Interval
+    >>> f = lambda x, y, z: x ** 2 + y ** 2 + z ** 2
+    >>> intervals = [Interval(0, 1, 10), Interval(0, 1, 10), Interval(0, 1, 10)]
+    >>> methods = [riemann.LEFT, riemann.LEFT, riemann.LEFT]
+    >>> riemann.riemann_sum(f, intervals, methods)
+    Decimal('0.855')
+
+See :doc:`/user/quickstart` for more examples and more in-depth explanation.
 
 Features
 --------
@@ -53,7 +61,6 @@ Features
 - Fast computation of Riemann sum.
 - Support for computation of multi-dimensional Riemann sum.
 - Built-in support for left, middle, and right Riemann sum methods.
-- Support for custom Riemann sum methods (using the :py:class:`riemann.Method` class).
 
 User Guide
 ----------
@@ -68,6 +75,6 @@ API Documentation
 -----------------
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
 
     api
