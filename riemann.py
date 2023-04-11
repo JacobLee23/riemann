@@ -136,6 +136,9 @@ class Right(RSumMethod):
         return lower + length
 
 
+LEFT, MIDDLE, RIGHT = Left(), Middle(), Right()
+
+
 class Interval:
     """
     Represents the closed interval over which a Riemann sum is computed.
@@ -145,11 +148,11 @@ class Interval:
     :return: The number of partitions dividing the interval
     """
     def __init__(self, lower: Number, upper: Number, npartitions: int):
-        self._lower = Decimal(str(lower) if isinstance(lower, float) else lower)
-        self._upper = Decimal(str(upper) if isinstance(upper, float) else upper)
-        self._npartitions = npartitions
+        self.lower = Decimal(str(lower) if isinstance(lower, float) else lower)
+        self.upper = Decimal(str(upper) if isinstance(upper, float) else upper)
+        self.npartitions = npartitions
 
-        self._length = (self.upper - self.lower) / self.npartitions
+        self.length = (self.upper - self.lower) / self.npartitions
 
     def __repr__(self):
         return "{}(lower={}, upper={}, npartitions={})".format(
@@ -158,34 +161,6 @@ class Interval:
             self.upper,
             self.npartitions
         )
-
-    @property
-    def lower(self) -> Decimal:
-        """
-        The lower bound of the interval.
-        """
-        return self._lower
-
-    @property
-    def upper(self) -> Decimal:
-        """
-        The upper bound of the interval.
-        """
-        return self._upper
-
-    @property
-    def npartitions(self) -> int:
-        """
-        The number of partitions dividing the interval.
-        """
-        return self._npartitions
-
-    @property
-    def length(self) -> Decimal:
-        """
-        The length of each of the subdivisions of the interval.
-        """
-        return self._length
 
     def partitions(self, method: RSumMethod) -> typing.Generator[Decimal, None, None]:
         """
