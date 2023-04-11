@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "riemann"
-version = "0.8.0"
+version = "1.0.0-a.1"
 authors = [
   { name="Jacob Lee", email="Jacob.J.Lee@outlook.com" },
 ]
@@ -12,7 +12,7 @@ description = "A package for computing Riemann summations in n-dimensional space
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
-  "Development Status :: 1 - Planning",
+  "Development Status :: 3 - Alpha",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
