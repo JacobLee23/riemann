@@ -18,7 +18,7 @@ closed interval :math:`[0, 1]` using 10 partitions along the :math:`x` axis.
     >>> from riemann import Interval
     >>> f = lambda x: x ** 2
     >>> intervals = [Interval(0, 1, 10)]
-    >>> methods = [riemann.LEFT]
+    >>> methods = [riemann.Left]
     >>> riemann.riemann_sum(f, intervals, methods)
     Decimal('0.285')
 
@@ -33,7 +33,7 @@ over the the closed interal :math:`x \in [0, 1] y \in [0, 1]` using 10 partition
     >>> from riemann import Interval
     >>> f = lambda x, y: x ** 2 + y ** 2
     >>> intervals = [Interval(0, 1, 10), Interval(0, 1, 10)]
-    >>> methods = [riemann.LEFT, riemann.LEFT]
+    >>> methods = [riemann.Left, riemann.Left]
     >>> riemann.riemann_sum(f, intervals, methods)
     Decimal('0.57')
 
