@@ -58,9 +58,10 @@ See :doc:`/user/quickstart` for more examples and more in-depth explanation.
 Features
 --------
 
-- Fast computation of Riemann sum.
-- Support for computation of multi-dimensional Riemann sum.
-- Built-in support for left, middle, and right Riemann sum methods.
+- Fast computation of Riemann sums.
+- Support for computation of multi-dimensional Riemann sums.
+- Support for the left, middle, and right Riemann sum rules.
+- Support for the trapezoidal Riemann sum rule.
 
 User Guide
 ----------
