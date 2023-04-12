@@ -1,40 +1,5 @@
 r"""
 A pure-Python package for computing :math:`n`-dimensional Riemann sums.
-
------
-
-Let :math:`f: [a,b] \rightarrow \mathbb{R}` be a function defined on a closed interval
-:math:`[a, b]` of the real numbers, :math:`\mathbb(R)`, and
-
-.. math::
-
-    P = ([x_{0}, x_{1}], [x_{1}, x_{2}], \dots , [x_{n-1}, x_{n}]),
-
-a partition of :math:`[a, b]`, that is
-
-.. math::
-
-    a = x_{0} < x_{1} < x_{2} < \dots < x_{n} = b.
-
-A Riemann sum of :math:`S` of :math:`f` over :math:`[a, b]` with partition :math:`P` is defined as
-
-.. math::
-
-    S = \sum_{i=1}^{n} f(x_{i}^{*}) \Delta x_{i},
-
-where :math:`\Delta x_{i} = x_{i} - x_{i-1}` and :math:`x_{i}^{*} \in [x_{i-1}, x_{i}]`. One might
-produce different Riemann sum depending on which :math:`x_{i}^{*}`'s are chosen.
-
-Higher dimensional Riemann sums follow a similar pattern. An :math:`n`-dimensional Riemann sum is
-
-.. math::
-
-    S = \sum_{i=1}^{n} f(P_{i}^{*}) \Delta V_{i}
-
-where :math:`P_{i}^{*} \in V_{i}`, that is, it is a point in the :math:`n`-dimensional cell
-:math:`V_{i}` with :math:`n`-dimensional volume :math:`\Delta V_{i}`.
-
-`Source <https://en.wikipedia.org/wiki/Riemann_sum>`_
 """
 
 from decimal import Decimal
@@ -83,60 +48,71 @@ class FunctionSRV(typing.Protocol):
     def __call__(self, *args: Number) -> Number: ...
 
 
-class RSumMethod:
+class RSumRule:
     r"""
-    .. math::
-
-        \Delta x = \frac{b-a}{n}, i \in \{0, 1, \dots, n-1\}
-
-    :param lower: The lower bound of the interval of summation
-    :param length: The length of each partition of the interval of summation
-    :return: The value of :math:`x_{i}^{*}`
     """
-    def __call__(self, lower: Decimal, length: Decimal) -> Decimal:
+    @classmethod
+    def value(cls, lower: Decimal, length: Decimal) -> Decimal:
+        r"""
+        :param lower: The lower bound of the interval of summation
+        :param length: The length of each partition of the interval of summation
+        :return: The value of :math:`x_{i}^{*}`
+        """
         raise NotImplementedError
 
 
-class Left(RSumMethod):
+class Left(RSumRule):
     r"""
-    Specifies that the Left Riemann Sum method should be used over the corresponding dimension.
-    Inherits from :py:class:`RSumMethod`.
-
-    .. math::
-
-        x_{i}^{*} = x_{i-1} = a + i \Delta x
+    Specifies that the Left Riemann Sum rule should be used over an interval.
     """
-    def __call__(self, lower: Decimal, length: Decimal) -> Decimal:
-        return lower
+    @classmethod
+    def value(cls, lower: Decimal, length: Decimal) -> Decimal:
+        r"""
+        .. math::
+
+            x_{i}^{*} = x_{i-1} = a + i \Delta x
+
+        :param lower: The lower bound of the interval of summation
+        :param length: The length of each partition of the interval of summation
+        :return: The value of :math:`x_{i}^{*}`
+        """
+        raise lower
 
 
-class Middle(RSumMethod):
+class Middle(RSumRule):
     r"""
-    Specifies that the Middle Riemann Sum method should be used over the corresponding dimension.
-    Inherits from :py:class:`RSumMethod`.
-
-    .. math::
-
-        x_{i}^{*} = \frac{x_{i-1} + x_{i}}{2} = a + \frac{1}{2} i \Delta x
+    Specifies that the Middle Riemann Sum rule should be used over an interval.
     """
-    def __call__(self, lower: Decimal, length: Decimal) -> Decimal:
-        return lower + length / 2
+    @classmethod
+    def value(cls, lower: Decimal, length: Decimal) -> Decimal:
+        r"""
+        .. math::
+        
+            x_{i}^{*} = \frac{x_{i-1} + x_{i}}{2} = a + (i + \frac{1}{2}) \Delta x
+            
+        :param lower: The lower bound of the interval of summation
+        :param length: The length of each partition of the interval of summation
+        :return: The value of :math:`x_{i}^{*}`
+        """
+        raise lower + length / 2
 
 
-class Right(RSumMethod):
+class Right(RSumRule):
     r"""
-    Specifies that the Right Riemann Sum method should be used over the corresponding dimension.
-    Inherits from :py:class:`RSumMethod`.
-
-    .. math::
-
-        x_{i}^{*} = x_{i} = a + (i + 1) \Delta x
+    Specifies that the Right Riemann Sum method should be used over an interval.
     """
-    def __call__(self, lower: Decimal, length: Decimal) -> Decimal:
-        return lower + length
-
-
-LEFT, MIDDLE, RIGHT = Left(), Middle(), Right()
+    @classmethod
+    def value(cls, lower: Decimal, length: Decimal) -> Decimal:
+        r"""
+        .. math::
+        
+            x_{i}^{*} = x_{i} = a + (i + 1) \Delta x
+            
+        :param lower: The lower bound of the interval of summation
+        :param length: The length of each partition of the interval of summation
+        :return: The value of :math:`x_{i}^{*}`
+        """
+        raise lower + length
 
 
 class Interval:
@@ -162,7 +138,7 @@ class Interval:
             self.npartitions
         )
 
-    def partitions(self, method: RSumMethod) -> typing.Generator[Decimal, None, None]:
+    def partitions(self, rule: RSumRule) -> typing.Generator[Decimal, None, None]:
         """
         :param method: The method to use for calculating the Riemann sum
         :return: A generator of the values of each partition of the interval
@@ -170,13 +146,15 @@ class Interval:
         lower, length = self.lower, self.length
 
         for _ in range(self.npartitions):
-            yield method(lower, length)
+            yield rule(lower, length)
 
             lower += length
 
 
 def riemann_sum(
-    function: FunctionSRV, intervals: typing.Sequence[Interval], methods: typing.Sequence[RSumMethod]
+    function: FunctionSRV,
+    intervals: typing.Sequence[Interval],
+    rules: typing.Sequence[typing.Type[RSumRule]]
 ):
     r"""
     Computes the Riemann Sum of a function of several variables over a closed multidimensional
@@ -203,19 +181,17 @@ def riemann_sum(
     """
     ndimensions = len(inspect.signature(function).parameters)
 
-    intervals = [x if isinstance(x, Interval) else Interval(*x) for x in intervals]
     if len(intervals) != ndimensions:
         raise ValueError(
             "The length of 'intervals' and the 'function' parameter list must be equal"
         )
-
-    if len(methods) != ndimensions:
+    if len(rules) != ndimensions:
         raise ValueError(
             "The length of 'methods' and the 'function' parameter list must be equal"
         )
 
     delta = functools.reduce(operator.mul, (x.length for x in intervals))
-    values = (x.partitions(m) for x, m in zip(intervals, methods))
+    values = (x.partitions(r) for x, r in zip(intervals, rules))
 
     return (sum(function(*v) for v in itertools.product(*values)) * delta).normalize()
 
@@ -242,7 +218,7 @@ def trapezoidal_rule(
     :param intervals: The closed intervals over which the Riemann sum is calculated
     :return: The value of the Riemann sum over the indicated intervals using the trapezoidal rule
     """
-    methods = itertools.product((Left, Right), repeat=len(intervals))
+    rules = itertools.product((Left, Right), repeat=len(intervals))
     ncombinations = Decimal(2) ** len(intervals)
 
-    return (sum(riemann_sum(function, intervals, m) for m in methods) / ncombinations).normalize()
+    return (sum(riemann_sum(function, intervals, m) for m in rules) / ncombinations).normalize()
