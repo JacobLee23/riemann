@@ -5,6 +5,8 @@ API Reference
 
 .. automodule:: riemann
 
+-----
+
 Let :math:`f: [a, b] \rightarrow \mathbb{R}` be a function defined on the closed interval :math:`[a, b]` of the real numbers, :math:`\mathbb{R}` and
 
 .. math::
