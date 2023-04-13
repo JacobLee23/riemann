@@ -90,7 +90,7 @@ class Left(RSumRule):
         :param length: The length of each partition of the interval of summation
         :return: The value of :math:`x_{i}^{*}`
         """
-        raise lower
+        return lower
 
 
 class Middle(RSumRule):
@@ -108,7 +108,7 @@ class Middle(RSumRule):
         :param length: The length of each partition of the interval of summation
         :return: The value of :math:`x_{i}^{*}`
         """
-        raise lower + length / 2
+        return lower + length / 2
 
 
 class Right(RSumRule):
@@ -126,7 +126,7 @@ class Right(RSumRule):
         :param length: The length of each partition of the interval of summation
         :return: The value of :math:`x_{i}^{*}`
         """
-        raise lower + length
+        return lower + length
 
 
 class Interval:
@@ -160,7 +160,7 @@ class Interval:
         lower, length = self.lower, self.length
 
         for _ in range(self.npartitions):
-            yield rule(lower, length)
+            yield rule.value(lower, length)
 
             lower += length
 
