@@ -20,7 +20,7 @@ The below code snippet computes the Riemann sum of :math:`f(x) = x^{2} + x` over
     >>> intervals = [Interval(0, 2, 10)]
     >>> rules = [riemann.Left]
     >>> riemann.riemann_sum(f, intervals, rules)
-    Decimal('2.28')
+    Decimal('4.08')
 
 However, **riemann** is not restricted to computing Riemann sums only over one dimension.
 A similar syntax can be used to calculate the Riemann sum of a function of several real variables

@@ -127,6 +127,82 @@ Generalization
     >>> riemann.trapezoidal_rule(f, intervals)
     Decimal(...)
 
+One Dimension
+^^^^^^^^^^^^^
+
+*Function*: :math:`f(x) = x^{2}`
+
++-----------+-------------------+---------------+
+|           | Interval          | Partitions    |
++===========+===================+===============+
+| :math:`x` | :math:`[0, 5]`    | 10            |
++-----------+-------------------+---------------+
+
+.. doctest::
+    :pyversion: >= 3.8
+
+    >>> import riemann
+    >>> from riemann import Interval
+    >>> f = lambda x: x ** 2
+    >>> intervals = [Interval(0, 5, 10)]
+    >>> riemann.trapezoidal_rule(f, intervals)
+    Decimal('41.875')
+
+Two Dimensions
+^^^^^^^^^^^^^^
+
+*Function*: :math:`f(x, y) = xy`
+
++-----------+-------------------+---------------+
+|           | Interval          | Partitions    |
++===========+===================+===============+
+| :math:`x` | :math:`[0, 5]`    | 10            |
++-----------+-------------------+---------------+
+| :math:`y` | :math:`[0, 5]`    | 20            |
++-----------+-------------------+---------------+
+
+.. doctest::
+    :pyversion: >= 3.8
+
+    >>> import riemann
+    >>> from riemann import Interval
+    >>> f = lambda x, y: x * y
+    >>> intervals = [Interval(0, 5, 10), Interval(0, 5, 20)]
+    >>> riemann.trapezoidal_rule(f, intervals)
+    Decimal('156.25')
+
+Three Dimensions
+^^^^^^^^^^^^^^^^
+
+Three Dimensions
+^^^^^^^^^^^^^^^^
+
+*Function*: :math:`f(x, y, z) = x + y^{2} + z^{3}`
+
++-----------+-------------------+---------------+
+|           | Interval          | Partitions    |
++===========+===================+===============+
+| :math:`x` | :math:`[0, 8]`    | 10            |
++-----------+-------------------+---------------+
+| :math:`y` | :math:`[0, 4]`    | 20            |
++-----------+-------------------+---------------+
+| :math:`z` | :math:`[0, 2]`    | 30            |
++-----------+-------------------+---------------+
+
+.. doctest::
+    :pyversion: >= 3.8
+
+    >>> import riemann
+    >>> from riemann import Interval
+    >>> f = lambda x, y, z: x + y ** 2 + z ** 3
+    >>> intervals = [
+    ...     Interval(0, 8, 10),
+    ...     Interval(0, 4, 20),
+    ...     Interval(0, 2, 30),
+    ... ]
+    >>> riemann.trapezoidal_rule(f, intervals)
+    Decimal('725.9022222222222222222222276')
+
 Computing the Upper and Lower Darboux Sums
 ------------------------------------------
 
