@@ -8,59 +8,35 @@ Riemann Documentation
 **Riemann** provides an intuitive syntax for calculating the Riemann sum of a function of several
 real variables over a closed multi-dimensional interval.
 
-Below is an example that computes the Riemann sum of the function :math:`f(x) = x^{2}` over the
-closed interval :math:`[0, 1]` using 10 partitions along the :math:`x` axis.
+The below code snippet computes the Riemann sum of :math:`f(x) = x^{2} + x` over the interal
+:math:`[0, 2]` using 10 partitions using the left rule along the :math:`x`-axis.
 
 .. doctest::
-    :pyversion: > 3.8
+    :pyversion: >= 3.8
 
     >>> import riemann
     >>> from riemann import Interval
-    >>> f = lambda x: x ** 2
-    >>> intervals = [Interval(0, 1, 10)]
-    >>> methods = [riemann.Left]
-    >>> riemann.riemann_sum(f, intervals, methods)
-    Decimal('0.285')
+    >>> f = lambda x: x ** 2 + x
+    >>> intervals = [Interval(0, 2, 10)]
+    >>> rules = [riemann.Left]
+    >>> riemann.riemann_sum(f, intervals, rules)
+    Decimal('2.28')
 
-Below is an example that computes the Riemann sum of the function :math:`f(x, y) = x^{2} + y^{2}`
-over the the closed interal :math:`x \in [0, 1] y \in [0, 1]` using 10 partitions along the
-:math:`x` axis and 10 partitions along the :math:`y` axis.
+However, **riemann** is not restricted to computing Riemann sums only over one dimension.
+A similar syntax can be used to calculate the Riemann sum of a function of several real variables
+over a closed multi-dimensionl interval.
+Additionally, different combinations of rules can be used to compute the Riemann sum.
 
-.. doctest::
-    :pyversion: > 3.8
-
-    >>> import riemann
-    >>> from riemann import Interval
-    >>> f = lambda x, y: x ** 2 + y ** 2
-    >>> intervals = [Interval(0, 1, 10), Interval(0, 1, 10)]
-    >>> methods = [riemann.Left, riemann.Left]
-    >>> riemann.riemann_sum(f, intervals, methods)
-    Decimal('0.57')
-
-Below is an example that computes the Riemann sum of the function :math:`f(x, y) = x^{2} + y^{2}`
-over the closed interval :math:`x \in [0, 1], y \in [0, 1], z \in [0, 1]` using 10 partitions
-along the :math:`x` axis, 10 partitions along the :math:`y` axis, and 10 partitions along the
-:math:`z` axis.
-
-.. doctest::
-    :pyversion: > 3.8
-
-    >>> import riemann
-    >>> from riemann import Interval
-    >>> f = lambda x, y, z: x ** 2 + y ** 2 + z ** 2
-    >>> intervals = [Interval(0, 1, 10), Interval(0, 1, 10), Interval(0, 1, 10)]
-    >>> methods = [riemann.LEFT, riemann.LEFT, riemann.LEFT]
-    >>> riemann.riemann_sum(f, intervals, methods)
-    Decimal('0.855')
-
-See :doc:`/user/quickstart` for more examples and more in-depth explanation.
+See :doc:`/user/quickstart` for additional example usage of the **riemann** module.
 
 Features
 --------
 
-- Fast computation of Riemann sum.
-- Support for computation of multi-dimensional Riemann sum.
-- Built-in support for left, middle, and right Riemann sum methods.
+- Fast computation of Riemann sums.
+- Supports the computation of multi-dimensional Riemann sums.
+- Supports the computation of the left, middle, and right Riemann sums.
+- Supports the computation of the trapezoidal Riemann sum.
+- Supports the computation of the upper and lower Darboux sums. (Under Development)
 
 User Guide
 ----------

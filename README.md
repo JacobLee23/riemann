@@ -13,39 +13,38 @@
 
 ## Basic Usage
 
-**Riemann** provides an intuitive syntax for calculating the Riemann sum of a function over a closed interval. The below code snippet computes the Riemann sum of $f(x) = x^{2}$ over the interval $[0, 1]$ using 10 partitions along the $x$ axis.
+**Riemann** provides an intuitive syntax for calculating the Riemann sum of a function of several real variables over a closed multi-dimensional interval.
+
+The below code snippet computes the Riemann sum of $f(x) = x^{2} + x$ over the interal $[0, 2]$ using 10 partitions using the left rule along the $x$-axis.
 
 ```python
 >>> import riemann
 >>> from riemann import Interval
->>> f = lambda x: x ** 2
->>> intervals = [Interval(0, 1, 10)]
->>> methods = [riemann.LEFT]
->>> riemann.rsum(f, intervals, methods)
-Decimal('0.285')
+>>> f = lambda x: x ** 2 + x
+>>> intervals = [Interval(0, 2, 10)]
+>>> rules = [riemann.Left]
+>>> riemann.riemann_sum(f, intervals, rules)
+Decimal('2.28')
 ```
 
-However, **Riemann** is not restricted to computing Riemann sums only over one dimension. A similar syntax can be used to calculate the Riemann sum of a function of several real variables over a closed multi-dimensional interval. The below code snippet computes the Riemann sum of $f(x, y) = x^{2} + y^{2}$ over the interval $x \in [0, 1], y \in [0, 1]$ using 10 partitions along the $x$ axis and 10 partitions along the $y$ axis.
+However, **riemann** is not restricted to computing Riemann sums only over one dimension.
+A similar syntax can be used to calculate the Riemann sum of a function of several real variables over a closed multi-dimensionl interval.
+Additionally, different combinations of rules can be used to compute the Riemann sum.
 
-```python
->>> import riemann
->>> from riemann import Interval
->>> f = lambda x, y: x ** 2 + y ** 2
->>> intervals = [Interval(0, 1, 10), Interval(0, 1, 10)]
->>> methods = [riemann.LEFT, riemann.LEFT]
->>> riemann.rsum(f, intervals, methods)
-Decimal('0.57')
-```
+See [Quickstart](https://riemann-py.readthedocs.io/en/latest/user/quickstart.html) for additional example usage of the **riemann** module.
+
 
 ## Features
 
-- Fast computation of Riemann sum.
-- Support for computation of multi-dimensional Riemann sum.
-- Built-in support for left, middle, and right Riemann sum methods.
+- Fast computation of Riemann sums.
+- Supports the computation of multi-dimensional Riemann sums.
+- Supports the computation of the left, middle, and right Riemann sums.
+- Supports the computation of the trapezoidal Riemann sum.
+- Supports the computation of the upper and lower Darboux sums. (Under Development)
 
 ## Requirements
 
-**Riemann** requires Python 3.5+. This project does not require any additional dependencies.
+**Riemann** requires **Python 3.8+**. This project does not require any additional dependencies.
 
 ## Installation
 
